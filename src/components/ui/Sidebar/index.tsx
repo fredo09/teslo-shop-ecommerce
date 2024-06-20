@@ -11,7 +11,6 @@ export const SideBar = () => {
     const isSideMenuOpen = useUiStore(state => state.isSideOpenMenu);
     const closeMenu = useUiStore(state => state.closeSideMenu);
 
-
     return (
         <div>
             {/* Background */}
