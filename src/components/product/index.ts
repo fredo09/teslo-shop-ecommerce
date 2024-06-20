@@ -3,3 +3,4 @@
  */
 
 export * from './SizeSelector';
+export * from './QuantitySelector';
