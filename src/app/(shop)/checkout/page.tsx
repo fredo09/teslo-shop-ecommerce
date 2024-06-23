@@ -59,7 +59,7 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Proceso de pago o checkout */}
-                    <div className="bg-white rounded-xl shadow-xl p-7">
+                    <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
                         {/* Resumen de direccion de envio */}
                         <h2 className="text-2xl text-center mb-2 font-bold">Direcciòn de envio:</h2>
                         <div className="mb-10 grid grid-cols-2">

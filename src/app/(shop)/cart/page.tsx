@@ -58,7 +58,7 @@ export default function CartPage() {
                     </div>
 
                     {/* Proceso de pago o checkout */}
-                    <div className="bg-white rounded-xl shadow-xl p-7">
+                    <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
                         <h2 className="text-2xl text-center mb-2">Resumen de Orden</h2>
 
                         <div className="grid grid-cols-2">
