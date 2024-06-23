@@ -4,6 +4,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { initialData } from "@/seed/seed";
 import { Title } from "@/components";
 
@@ -15,6 +16,8 @@ const PRODUCTS_IN_CART = [
 ];
 
 export default function CheckoutPage() {
+    //* redireccion de pages en next -> redirect
+    //redirect('/empty');
 
     return (
         <div className="flex justify-center items-center mb-72 px-10 sm-px-0">
