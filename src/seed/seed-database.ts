@@ -1,3 +1,6 @@
+/*
+ * rountime seed
+ */
 
 import prisma from '../lib/prisma';
 import { initialData } from "./seed";
@@ -45,6 +48,8 @@ async function main() {
             data: imagesData
         });
     });
+    
+    console.log("🚀 ~ seed lanzado correctamente!! ✅ 😎 ")
 }
 
 
