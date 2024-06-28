@@ -1,10 +1,23 @@
 import { GridProducts, Title } from "@/components";
-import { initialData } from '@/seed/seed';
+import { getproductPaginationActions } from "@/actions";
+import { redirect } from "next/navigation";
 
-const productsData = initialData.products;
-console.log("🚀 ~ productsData:", productsData)
+interface Props {
+    searchParams : { //* -> PARAMS PAGE URL
+        page?: string
+    }
+}
 
-export default function Home() {
+export default async function Home({ searchParams }: Props) {
+
+    const page = searchParams.page ? parseInt(searchParams.page) : 1;
+    const { products, currentPage, totalPages } = await getproductPaginationActions({ page });
+    
+
+    if (products && products.length === 0) {
+        redirect('/');
+    }
+
     return (
         <main className="">
             <Title 
@@ -14,7 +27,7 @@ export default function Home() {
             />
 
             <GridProducts 
-                products={productsData}
+                products={ products }
             />
         </main>
     );

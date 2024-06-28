@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma"
 
 interface PaginationOption{
     page?: number, 
-    take?:number, //* -> Objetos a mostrar cantidad
+    take?:number, //* -> articulos a mostrar por pagina
 
 }
 
@@ -18,7 +18,7 @@ export const getproductPaginationActions = async ({ page = 1, take = 12 }: Pagin
     if (page < 1) page = 1;
 
     try {
-        // 1. Obtener los productos
+        //* -> 1. Obtener los productos
         const products = await prisma.product.findMany({
             take: take,
             skip: (page - 1) * take,
@@ -32,9 +32,14 @@ export const getproductPaginationActions = async ({ page = 1, take = 12 }: Pagin
             },
         });
 
+        //* -> 2. Obtener el total de de paginas
+        const countProducts = await prisma.product.count({});
+
+        const totalPages = Math.ceil( countProducts / take );
+
         return {
             currentPage: page,
-            totalPages: 10,
+            totalPages: totalPages,
             products: products.map((product) => ({
                 ...product,
                 images: product.imageProduct.map((image) => image.urlImage),
