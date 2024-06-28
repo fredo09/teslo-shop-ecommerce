@@ -1,4 +1,4 @@
-import { GridProducts, Title } from "@/components";
+import { GridProducts, Pagination, Title } from "@/components";
 import { getproductPaginationActions } from "@/actions";
 import { redirect } from "next/navigation";
 
@@ -29,6 +29,8 @@ export default async function Home({ searchParams }: Props) {
             <GridProducts 
                 products={ products }
             />
+
+            <Pagination totalPages={ totalPages } />
         </main>
     );
 }
