@@ -6,7 +6,7 @@ import { titleFont } from "@/config/fonts";
 export const Footer = () => {
     return (
         <footer className="text-gray-600 body-font">
-            <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+            <div className="container px-5 py-10 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left md:mt-0 mt-10">
                     <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
@@ -21,13 +21,13 @@ export const Footer = () => {
                         <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Categorias</h2>
                         <nav className="list-none mb-10">
                             <li>
-                                <Link href={'/category/men'} className="text-gray-600 hover:text-gray-800 hover:underline">Hombres</Link>
+                                <Link href={'/gender/Men'} className="text-gray-600 hover:text-gray-800 hover:underline">Hombres</Link>
                             </li>
                             <li>
-                                <Link href={'/category/women'} className="text-gray-600 hover:text-gray-800 hover:underline">Mujeres</Link>
+                                <Link href={'/gender/Women'} className="text-gray-600 hover:text-gray-800 hover:underline">Mujeres</Link>
                             </li>
                             <li>
-                                <Link href={'/category/kid'} className="text-gray-600 hover:text-gray-800 hover:underline">Kids</Link>
+                                <Link href={'/gender/Kid'} className="text-gray-600 hover:text-gray-800 hover:underline">Kids</Link>
                             </li>
                         </nav>
                     </div>
@@ -36,10 +36,10 @@ export const Footer = () => {
                         <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Configuraciones</h2>
                         <nav className="list-none mb-10">
                             <li>
-                                <Link href={'/category/men'} className="text-gray-600 hover:text-gray-800 hover:underline">Ver mi Perfil</Link>
+                                <Link href={'#'} className="text-gray-600 hover:text-gray-800 hover:underline">Ver mi Perfil</Link>
                             </li>
                             <li>
-                                <Link href={'/category/women'} className="text-gray-600 hover:text-gray-800 hover:underline">Ordenes</Link>
+                                <Link href={'#'} className="text-gray-600 hover:text-gray-800 hover:underline">Ordenes</Link>
                             </li>
                         </nav>
                     </div>
