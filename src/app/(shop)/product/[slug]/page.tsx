@@ -1,10 +1,9 @@
 /**
  * Page product slug
  */
-
 export const revalidate = 604800 ; //* -> revalidar data de productos en 7 dias 
 
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
 import { getProductBySlugAction } from '@/actions'
@@ -15,6 +14,37 @@ import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduc
 interface Props {
     params: {
         slug: string
+    }
+}
+
+// * generamos Metadata desdes el path url
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    // read route params
+    const slug = params.slug
+
+    // fetch data para info de la data
+    //const product = await fetch(`https://.../${id}`).then((res) => res.json())
+
+    // * traemos info del producto del server actions
+    const product = await getProductBySlugAction(slug);
+
+    // optionally access and extend (rather than replace) parent metadata
+    // const previousImages = (await parent).openGraph?.images || []
+
+    return {
+        title: product?.title ?? 'Producto no encontrado',
+        description: product?.description ?? '',
+        openGraph: {
+            title: product?.title ?? 'Producto no encontrado',
+            description: product?.description ?? '',
+            // images: ['/some-specific-page-image.jpg', ...previousImages],
+            images: [
+                `products/${product?.images[1]}`
+            ]
+        },
     }
 }
 
