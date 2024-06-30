@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 
 interface Props {
@@ -7,6 +10,34 @@ interface Props {
 }
 
 export const Pagination = ({ totalPages }: Props) => {
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const currentPath = Number(searchParams.get('page')) ?? 1 ;
+
+  const paginationByUrl = ( pageNumber: string | number ) => {
+    const params = new URLSearchParams(searchParams );
+
+    if ( pageNumber === '...' ) {
+      console.log("🚀 ~ paginationByUrl ~ pageNumber:", `${pathName}?${params.toString()}`);
+      return `${pathName}?${params.toString()}`;
+    }
+
+    //! + -> vuelve un string a number
+    if ( +pageNumber <= 0 ) {
+      console.log("🚀 ~ paginationByUrl ~ pageNumber:", `${pathName}`)
+      return `${pathName}`; // * -> href='/'
+    }
+
+    if ( +pageNumber > totalPages ) {
+      console.log("🚀 ~ caso pagenumber > totalPages ", `${pathName}?${params.toString}` )
+      return `${pathName}?${params.toString}`;
+    }
+
+    params.set('page', pageNumber.toString());
+    console.log("🚀 ~ paginationByUrl ~ `${pathName}?${params.toString()}`:", `${pathName}?${params.toString()}`)
+    return `${pathName}?${params.toString()}`;
+  }
+
   return (
     <div className="flex text-center justify-center mt-10 mb-32">
       <nav aria-label="Page navigation example">
@@ -14,7 +45,7 @@ export const Pagination = ({ totalPages }: Props) => {
           <li className="page-item disabled">
             <Link
               className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-              href="#">
+              href={ paginationByUrl( currentPath - 1 ) }>
                 <IoChevronBackOutline size={30}/>
             </Link>
           </li>
@@ -32,7 +63,7 @@ export const Pagination = ({ totalPages }: Props) => {
           <li className="page-item">
             <Link
             className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            href="#">
+              href={ paginationByUrl( currentPath + 1 ) }>
               <IoChevronForwardOutline size={30}/>
             </Link>
           </li>
