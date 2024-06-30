@@ -3,19 +3,19 @@
  */
 
 export interface Product {
-    //id :string;
+    id :string;
     description: string;
     images: string[];
     inStock: number;
     price: number;
-    sizes: ValidSizes[];
+    sizes: Size[];
     slug: string;
     tags: string[];
     title: string;
-    type: ValidTypes; //Todo: Llamarlo de forma no plural
-    gender: ValidCategories;
+    //type: Type; //Todo: Llamarlo de forma no plural
+    gender: Category;
 }
 
-export type ValidCategories = 'men' | 'women' | 'kid' | 'unisex';
-export type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
-export type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
+export type Category = 'Men' | 'Women' | 'Kid' | 'Unisex';
+export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
+export type Type = 'shirts' | 'pants' | 'hoodies' | 'hats';

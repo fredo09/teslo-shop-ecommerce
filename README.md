@@ -26,16 +26,69 @@ Lista de software y herramientas, incluyendo versiones, que necesitas para insta
 
 Una guía paso a paso sobre cómo configurar el entorno de desarrollo. ⚙ 
 
-### 
+### 1.- Clona repositorio
+
+Clonar el repositorio con el siguiente comando:
 
 ```bash
-# paso 1
+https://github.com/fredo09/teslo-shop-ecommerce.git
+```
+>[!NOTE]
+>
+> Recuerda que necesitas apuntar a la rama **develop** y crear tu rama para agregar nuevas funcionalidades.
+
+### 2.- Reemplaza archivo .env_template.
+
+Agrega tus variables de entorno, puedes usar el template ```.env_template``` y crear tu ```.env``` para agregar tus configuraciones.
+
+### 3.- Instala dependencias Npm.
+
+Usa el siguiente comando para instalar dependencias de node.
+
+```bash
+npm i
 ```
 
-Y así sucesivamente...
+## Levanta base de datos en Docker.
+
+Necesitaras levantar la base de datos de postgres que esta montado en docker
+
+### 4.- Crea contenedor de Postgres.
+
+Para generar la base de datos en docker ejecuta el siguiente comando ya que la instrucciones de construccion ya esta en el ```docker-compose.yml```
 
 ```bash
-# paso 2
+docker-compose -d up
+```
+
+## Configurarion de Prisma.
+
+### 5.- Migracion de modelos para Prisma.
+
+Ya habra una configuración de **prisma** de la base de datos para poder hacer tu migracion usa el siguiente comando: 
+
+```bash
+npx prisma migrate dev --name "name_migrate"
+```
+
+>[!NOTE]
+>
+> Recuerda que puedes poner el nombre de tu migracion, sustituyendo ```name_migrate``` por el que creas conveniente.
+
+### 6.- Ejecutar Seed de base de datos.
+
+Para llenar la base de datos con datos de prueba esto de **ambiente de desarrollo** puedes usar el siguiente comando:
+
+```bash
+npm run dev:seed
+```
+
+### 7.- Levantar el proyecto.
+
+Y finalmente para levantar el proyecto usa el siguiente comando usando **turbo-webpack**:
+
+```bash
+npm run dev:turbo
 ```
 
 ## Ejecutando las Pruebas ⚙️

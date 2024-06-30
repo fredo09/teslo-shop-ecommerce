@@ -1,10 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
-import { ValidSizes } from '@/interfaces';
+import { Size } from '@/interfaces';
 
 interface Props {
-  selectorSize: ValidSizes;
-  availableSizes: ValidSizes[]; //* -> ['XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+  selectorSize: Size;
+  availableSizes: Size[]; //* -> ['XS','S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 }
 
 
