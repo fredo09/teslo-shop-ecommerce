@@ -1,3 +1,9 @@
+/*
+ *  Page Shop inicial 
+ */
+
+export const revalidate = 60; //* -> revialida informacion de la data api durante 60 segundos
+
 import { GridProducts, Pagination, Title } from "@/components";
 import { getproductPaginationActions } from "@/actions";
 import { redirect } from "next/navigation";
