@@ -4,13 +4,11 @@ import React, { useState } from 'react';
 import { IoAddCircleOutline, IoRemoveCircleOutline } from 'react-icons/io5';
 
 interface Props {
-  quantity: number
+  quantity: number;
+  onQuantityValue: (quantity: number) => void;
 }
 
-export const QuantitySelector = ({ quantity }: Props) => {
-
-  const [quantityProduct, setQuantityProduct] = useState(quantity);
-
+export const QuantitySelector = ({ quantity, onQuantityValue }: Props) => {
   // const onCountProduct = (value: number) => {
   //   console.log("🚀 ~ onCountProduct ~ value:", value)
   //   console.log('infooosdf ', quantityProduct + value);
@@ -22,19 +20,27 @@ export const QuantitySelector = ({ quantity }: Props) => {
   //   console.log("🚀 ~ onCountProduct ~ quantityProduct:", quantityProduct + value)
   // }
 
+  const onSetQuantityLess = () => {
+    onQuantityValue(quantity -1 );
+  }
+
+  const onSetQuantityPlus = () => {
+    onQuantityValue(quantity + 1);
+  }
+
   return (
     <div className='flex'>
       <button
-        disabled={ quantityProduct < 1 }
-        onClick={() => setQuantityProduct(quantityProduct - 1)}>
+        disabled={ quantity <= 1 }
+        onClick={() => onSetQuantityLess()}>
         <IoRemoveCircleOutline size={30}/>
       </button>
       <span className='w-20 mx-3 px-5 bg-gray-100 text-center rounded-md'>
-        { quantityProduct }
+        { quantity }
       </span>
       <button
-        disabled={quantityProduct >= 5}
-        onClick={() => setQuantityProduct(quantityProduct + 1)}>
+        disabled={ quantity >= 8 }
+        onClick={() => onSetQuantityPlus() }>
         <IoAddCircleOutline size={30} />
       </button>
     </div>
