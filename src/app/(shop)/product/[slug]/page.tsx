@@ -2,10 +2,15 @@
  * Page product slug
  */
 
-import { initialData } from "@/seed/seed";
+export const revalidate = 604800 ; //* -> revalidar data de productos en 7 dias 
+
+import { Metadata } from "next";
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
-import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduct } from "@/components";
+import { getProductBySlugAction } from '@/actions'
+import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduct, StockProduct } from "@/components";
+
+//import { initialData } from "@/seed/seed";
 
 interface Props {
     params: {
@@ -13,14 +18,16 @@ interface Props {
     }
 }
 
-const seedProduct = initialData.products;
+//const seedProduct = initialData.products;
 
-export default function ProductPage({ params }: Props ) {
+export default async function ProductPage({ params }: Props ) {
     const { slug } = params;
 
-    const product = seedProduct.find( product => {
-        return product.slug === slug 
-    });
+    // const product = seedProduct.find( product => {
+    //     return product.slug === slug 
+    // });
+
+    const product  = await getProductBySlugAction( slug );
 
     console.log("🚀 ~ ProductPage ~ product:", product)
     
@@ -50,11 +57,16 @@ export default function ProductPage({ params }: Props ) {
             {/* Details */}
             <div className="col-span-1 px-5">
                 <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
-                    { product.title }
+                    {product.title}
                 </h1>
                 <p className="text-lg mb-5">
                     ${ product.price.toFixed(2) }
                 </p>
+
+                {/* Stock productos */}
+                <StockProduct 
+                    slug={ product.slug }
+                />
 
                 {/* Selector de tallas */}
                 <SizeSelector 
