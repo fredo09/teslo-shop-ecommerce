@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import clsx from 'clsx';
+import { generatePaginationNumbers } from '@/utils';
+import { redirect, usePathname, useSearchParams } from 'next/navigation';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 
 interface Props {
@@ -12,7 +14,19 @@ interface Props {
 export const Pagination = ({ totalPages }: Props) => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const currentPath = Number(searchParams.get('page')) ?? 1 ;
+
+  const pageString = searchParams.get('page') ?? 1;
+  const isNan = isNaN(+pageString);
+
+  let currentPath = isNan ? 1 : +pageString;
+
+  // Si se usa ?page=abd -> null
+  if ( currentPath < 1 || isNan ) {
+    redirect( pathName );
+  }
+
+  const allPages = generatePaginationNumbers( currentPath, totalPages );
+  console.log("🚀 ~ Pagination ~ allPages:", allPages);
 
   const paginationByUrl = ( pageNumber: string | number ) => {
     const params = new URLSearchParams(searchParams );
@@ -34,7 +48,6 @@ export const Pagination = ({ totalPages }: Props) => {
     }
 
     params.set('page', pageNumber.toString());
-    console.log("🚀 ~ paginationByUrl ~ `${pathName}?${params.toString()}`:", `${pathName}?${params.toString()}`)
     return `${pathName}?${params.toString()}`;
   }
 
@@ -50,15 +63,24 @@ export const Pagination = ({ totalPages }: Props) => {
             </Link>
           </li>
 
-          <li className="page-item"><a
-            className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            href="#">1</a></li>
-          <li className="page-item active"><a
-            className="page-link relative block py-1.5 px-3 border-0 bg-blue-600 outline-none transition-all duration-300 rounded text-white hover:text-white hover:bg-blue-600 shadow-md focus:shadow-md"
-            href="#">2 <span className="visually-hidden"></span></a></li>
-          <li className="page-item"><a
-            className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-            href="#">3</a></li>
+          {
+            allPages.map( (page, idx) => (
+              <li className="page-item" key={idx}>
+                <Link
+                  className={
+                    clsx(
+                      "page-link relative block py-1.5 px-3 border-0 outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none",
+                      {
+                        "bg-blue-700 text-white shadow-sm hover:text-white hover:bg-blue-500": page === currentPath
+                      }
+                    )
+                  }
+                  href={ paginationByUrl( page ) }>
+                  { page }
+                </Link>
+              </li>
+            ))
+          }
 
           <li className="page-item">
             <Link
@@ -71,4 +93,4 @@ export const Pagination = ({ totalPages }: Props) => {
       </nav>
     </div>
   )
-}
+};
