@@ -1,11 +1,15 @@
 /**
  * Page product slug
  */
+export const revalidate = 604800 ; //* -> revalidar data de productos en 7 dias 
 
-import { initialData } from "@/seed/seed";
+import { Metadata, ResolvingMetadata } from "next";
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
-import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduct } from "@/components";
+import { getProductBySlugAction } from '@/actions'
+import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduct, StockProduct } from "@/components";
+
+//import { initialData } from "@/seed/seed";
 
 interface Props {
     params: {
@@ -13,14 +17,47 @@ interface Props {
     }
 }
 
-const seedProduct = initialData.products;
+// * generamos Metadata desdes el path url
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    // read route params
+    const slug = params.slug
 
-export default function ProductPage({ params }: Props ) {
+    // fetch data para info de la data
+    //const product = await fetch(`https://.../${id}`).then((res) => res.json())
+
+    // * traemos info del producto del server actions
+    const product = await getProductBySlugAction(slug);
+
+    // optionally access and extend (rather than replace) parent metadata
+    // const previousImages = (await parent).openGraph?.images || []
+
+    return {
+        title: product?.title ?? 'Producto no encontrado',
+        description: product?.description ?? '',
+        openGraph: {
+            title: product?.title ?? 'Producto no encontrado',
+            description: product?.description ?? '',
+            // images: ['/some-specific-page-image.jpg', ...previousImages],
+            images: [
+                `products/${product?.images[1]}`
+            ]
+        },
+    }
+}
+
+//const seedProduct = initialData.products;
+
+export default async function ProductPage({ params }: Props ) {
     const { slug } = params;
 
-    const product = seedProduct.find( product => {
-        return product.slug === slug 
-    });
+    // const product = seedProduct.find( product => {
+    //     return product.slug === slug 
+    // });
+
+    const product  = await getProductBySlugAction( slug );
 
     console.log("🚀 ~ ProductPage ~ product:", product)
     
@@ -50,11 +87,16 @@ export default function ProductPage({ params }: Props ) {
             {/* Details */}
             <div className="col-span-1 px-5">
                 <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
-                    { product.title }
+                    {product.title}
                 </h1>
                 <p className="text-lg mb-5">
                     ${ product.price.toFixed(2) }
                 </p>
+
+                {/* Stock productos */}
+                <StockProduct 
+                    slug={ product.slug }
+                />
 
                 {/* Selector de tallas */}
                 <SizeSelector 
