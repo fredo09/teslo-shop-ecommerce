@@ -11,6 +11,9 @@ interface State {
     cart: CartStore[];
 
     //* metodos para manejar el store cart 🛒
+    //* -> returna el total de elementos en el carrito
+    getTotalItems: () => number;
+    
     //Todo: addToProductCart
     addToProductCart: ( product: CartStore ) => void;
     //Todo: updateProductQuantity
@@ -25,6 +28,13 @@ export const useCartStore = create<State>()(
             cart: [],
 
             //* Actions
+
+            getTotalItems: () => {
+                const { cart } = get();
+                return cart.reduce((totalItems, itemCart) =>  totalItems + itemCart.quantity , 0);
+            },
+
+
             addToProductCart: (product: CartStore) => {
                 const { cart } = get();
                 console.log("🚀 ~ cart:", cart);
