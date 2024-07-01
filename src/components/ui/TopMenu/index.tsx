@@ -1,15 +1,23 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useUiStore } from '@/store';
+import { useUiStore, useCartStore } from '@/store';
 import { titleFont } from '@/config/fonts';
 import { IoSearchOutline, IoCartOutline } from 'react-icons/io5';
 
 export const TopMenu = () => {
 
-    // * Use store open Menu
+    // * Use store open Menu and StoreCart
     const openMenu = useUiStore( state => state.openSideMenu );
+    const totalItemsinCart = useCartStore( state => state.getTotalItems() ); //* -> aqui ejecuto la accion del store "()"
+
+    const [isLoadingCart, setIsLoadingCart] = useState(false);
+
+    useEffect(() => {
+        //! Nos sirve para solventar la hydratacion entre el server y el cliente en el shopping cart  
+        setIsLoadingCart(true);
+    }, []);
 
     return (
         <nav className='flex px-5 justify-between items-center w-full'>
@@ -41,9 +49,17 @@ export const TopMenu = () => {
                 </Link>
                 <Link href='/cart' className="mx-2">
                     <div className='relative'>
-                        <span className='absolute text-xs rounded-full font-bold px-1 -top-2 -right-2 bg-blue-700 text-white'>
-                            3
-                        </span>
+                        {
+                            (isLoadingCart && totalItemsinCart >= 0) ? (
+                                <span className='absolute text-xs rounded-full font-bold px-1 -top-2 -right-2 bg-blue-700 text-white fade-in'>
+                                    {totalItemsinCart}
+                                </span>
+                            ) : (
+                                <span className='absolute text-xs rounded-full font-bold px-1 -top-2 -right-2 bg-blue-700 text-white'>
+                                    0
+                                </span>
+                            )
+                        }
                         <IoCartOutline className='w-5 h-5'/>
                     </div>
                 </Link>
