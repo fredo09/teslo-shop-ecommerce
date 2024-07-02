@@ -17,6 +17,7 @@ interface State {
     //Todo: addToProductCart
     addToProductCart: ( product: CartStore ) => void;
     //Todo: updateProductQuantity
+    updateProductQuantity: ( product: CartStore, quantity: number ) => void;
     //Todo: removeProductToCart
 }
 
@@ -25,6 +26,7 @@ export const useCartStore = create<State>()(
     persist( //! -> Nos sirve para agregar el store al localStorage
         //* set y get son funciones del mismo zustand
         (set, get) => ({
+            //* Global State
             cart: [],
 
             //* Actions
@@ -68,6 +70,21 @@ export const useCartStore = create<State>()(
                 set({
                     cart: updateCountProductInCart
                 });
+            },
+
+            //* Setemaos la nueva cantidad al producto en el store 
+            updateProductQuantity: ( product: CartStore, quantity: number ) => {
+                const { cart } = get();
+
+                const updatedItemsIncart = cart.map(item => {
+                    if(product.id === item.id && product.size === item.size) {
+                        return { ...item, quantity: quantity };
+                    }
+
+                    return item;
+                });
+
+                set({ cart: updatedItemsIncart });
             }
         })
         ,{
