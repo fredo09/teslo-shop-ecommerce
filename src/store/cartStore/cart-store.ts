@@ -19,6 +19,7 @@ interface State {
     //Todo: updateProductQuantity
     updateProductQuantity: ( product: CartStore, quantity: number ) => void;
     //Todo: removeProductToCart
+    removeProductToCart: ( product: CartStore ) => void;
 }
 
 
@@ -85,6 +86,18 @@ export const useCartStore = create<State>()(
                 });
 
                 set({ cart: updatedItemsIncart });
+            },
+
+            //* Remove product in storeCart
+            removeProductToCart: (product: CartStore) => {
+                const { cart } = get();
+
+                const removeProductCart = cart.filter(item => (
+                    item.id !== product.id || item.size !== product.size
+                ));
+                console.log("🚀 ~ removeProductCart:", removeProductCart)
+
+                set({ cart: removeProductCart })
             }
         })
         ,{
