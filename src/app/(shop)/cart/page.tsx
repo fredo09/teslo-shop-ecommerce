@@ -2,10 +2,10 @@
  * Page cart admin
  */
 
-import Image from "next/image";
 import Link from "next/link";
+import { Title } from "@/components";
+import { ProductInCart } from "./ui/ProductInCart";
 import { initialData } from "@/seed/seed";
-import { QuantitySelector, Title } from "@/components";
 
 
 const PRODUCTS_IN_CART = [
@@ -17,7 +17,7 @@ const PRODUCTS_IN_CART = [
 export default function CartPage() {
 
     return (
-        <div className="flex justify-center items-center mb-72 px-10 sm-px-0">
+        <div className="flex justify-center items-center mb-40 px-10 sm-px-0">
             <div className="flex flex-col w-[1000px">
                 <Title title="Carrito de Compras" />
 
@@ -31,30 +31,7 @@ export default function CartPage() {
                         </Link>
 
                         {/* Items del carrito */}
-                        {
-                            PRODUCTS_IN_CART.map(item => (
-                                <div key={item.slug} className="flex mb-5">
-                                    <Image
-                                        src={`/products/${item.images[0]}`}
-                                        alt={item.title}
-                                        height={100}
-                                        width={100}
-                                        className="mr-5 rounded"
-                                    />
-                                    <div>
-                                        <p>{item.title}</p>
-                                        <p>{item.price}</p>
-                                        <QuantitySelector
-                                            quantity={2}
-                                        />
-
-                                        <button className="hover:underline mt-3">
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </div>
-                            ))
-                        }
+                        <ProductInCart/>
                     </div>
 
                     {/* Proceso de pago o checkout */}
