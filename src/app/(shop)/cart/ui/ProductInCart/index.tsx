@@ -50,7 +50,7 @@ export const ProductInCart = () => {
                                 <p className='font-bold'> {item.title}</p>
                             </Link>
                             <p> Talla: {item.size}</p>
-                            <p>{item.price}</p>
+                            <p>$ {item.price.toFixed(2)}</p>
                             <QuantitySelector
                                 onQuantityValue={( quantity ) => setQuantityItemCart( item, quantity )}
                                 quantity={ item.quantity }
