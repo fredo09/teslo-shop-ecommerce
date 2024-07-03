@@ -3,7 +3,7 @@
  */
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { titleFont } from '@/config/fonts';
 import { getStockProductBySlugAction  } from '@/actions';
 
@@ -15,23 +15,16 @@ export const StockProduct = ({ slug }: Props) => {
   const [stock, setStock] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // const getStock = async () => {
-  //   const stock = await getStockProductBySlugAction(slug);
-  //   setStock(stock);
-  //   setIsLoading(false);
-  // }
-  //! se cambio a useCallback para memorizar la aplicacion y evitar reenderizados del componente
-  const getStock = useCallback( async () => {
-      const stock = await getStockProductBySlugAction(slug);
-      setStock(stock);
-      setIsLoading(false);
-  }, [slug])
-
   //* Recuperamos el producto
   useEffect(() => {
     getStock();
-  }, [getStock]);
+  });
   
+  const getStock = async () => {
+    const stock = await getStockProductBySlugAction(slug);
+    setStock(stock);
+    setIsLoading(false);
+  }
 
   return (
     <>
