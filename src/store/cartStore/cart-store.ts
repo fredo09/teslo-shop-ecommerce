@@ -14,6 +14,14 @@ interface State {
     //* -> returna el total de elementos en el carrito
     getTotalItems: () => number;
     
+    //* Proporciona el contenido del sumary del carrito de compras
+    getSummaryInformation: () => {
+        subTotalProductIncart: number;
+        impuesto: number;
+        totalProductInCart: number;
+        itemIncartSummary: number;
+    };
+    
     //Todo: addToProductCart
     addToProductCart: ( product: CartStore ) => void;
     //Todo: updateProductQuantity
@@ -35,6 +43,28 @@ export const useCartStore = create<State>()(
             getTotalItems: () => {
                 const { cart } = get();
                 return cart.reduce((totalItems, itemCart) =>  totalItems + itemCart.quantity , 0);
+            },
+
+            //* Contenido del sumary en el carrito 
+            getSummaryInformation:() => {
+                const { cart } = get();
+
+                const subTotalProductIncart = cart.reduce( (subTotal, product) =>
+                    (product.quantity * product.price) + subTotal // (2 * $2) + valor anterior de la misma suma
+                , 0);
+
+                //*Impuestos
+                const impuesto = subTotalProductIncart * 0.15;
+
+                const totalProductInCart = subTotalProductIncart + impuesto;
+                const itemIncartSummary = cart.reduce((totalItems, itemCart) => totalItems + itemCart.quantity, 0);
+                
+                return {
+                    subTotalProductIncart,
+                    impuesto,
+                    totalProductInCart,
+                    itemIncartSummary
+                }
             },
 
 
