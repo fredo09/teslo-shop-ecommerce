@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useCartStore } from '@/store';
+import { currencyFormat } from '@/utils';
 
 export const SummaryProductInCart = () => {
     const getSummaryInfo = useCartStore( state => state.getSummaryInformation() );
@@ -39,13 +40,13 @@ export const SummaryProductInCart = () => {
             </span>
 
             <span>Subtotal</span>
-            <span className="text-right">$ {getSummaryInfo.subTotalProductIncart}</span>
+            <span className="text-right">$ { currencyFormat(getSummaryInfo.subTotalProductIncart) }</span>
 
             <span>Impuesto (15%)</span>
-            <span className="text-right">$ {getSummaryInfo.impuesto}</span>
+            <span className="text-right">$ { currencyFormat(getSummaryInfo.impuesto)}</span>
 
             <span className="mt-5 text-2xl">Total</span>
-            <span className="mt-5 text-x2l text-right">$ {getSummaryInfo.totalProductInCart}</span>
+            <span className="mt-5 text-x2l text-right">$ {currencyFormat(getSummaryInfo.totalProductInCart)}</span>
         </div>
     )
 }
