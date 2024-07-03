@@ -18,7 +18,7 @@ export const StockProduct = ({ slug }: Props) => {
   //* Recuperamos el producto
   useEffect(() => {
     getStock();
-  },[]);
+  });
   
   const getStock = async () => {
     const stock = await getStockProductBySlugAction(slug);

@@ -7,7 +7,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import { titleFont } from "@/config/fonts";
 import { notFound } from "next/navigation";
 import { getProductBySlugAction } from '@/actions'
-import { QuantitySelector, SizeSelector, SlideShowMobileProduct, SlideShowProduct, StockProduct } from "@/components";
+import { SlideShowMobileProduct, SlideShowProduct, StockProduct } from "@/components";
+import { AddToCart } from "../ui/AddToCart";
 
 //import { initialData } from "@/seed/seed";
 
@@ -94,23 +95,12 @@ export default async function ProductPage({ params }: Props ) {
                 </p>
 
                 {/* Stock productos */}
-                <StockProduct 
-                    slug={ product.slug }
+                <StockProduct
+                    slug={product.slug}
                 />
 
-                {/* Selector de tallas */}
-                <SizeSelector 
-                    selectorSize={product.sizes[0]}
-                    availableSizes={product.sizes}
-                />
-
-                {/* Selector de cantidades */}
-                <QuantitySelector quantity={1} />
-
-                {/* Button */}
-                <button className="btn-primary my-5">
-                    Agregar al carrito
-                </button>
+                {/* Component Cart */}
+                <AddToCart product={product} />
 
                 {/* Description */}
                 <h3 className="font-bold text-sm">Descripcion</h3>
