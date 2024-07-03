@@ -9,8 +9,8 @@ import { IoSearchOutline, IoCartOutline } from 'react-icons/io5';
 export const TopMenu = () => {
 
     // * Use store open Menu and StoreCart
-    const openMenu = useUiStore( state => state.openSideMenu );
-    const totalItemsinCart = useCartStore( state => state.getTotalItems() ); //* -> aqui ejecuto la accion del store "()"
+    const openMenu = useUiStore(state => state.openSideMenu);
+    const totalItemsinCart = useCartStore(state => state.getTotalItems()); //* -> aqui ejecuto la accion del store "()"
 
     const [isLoadingCart, setIsLoadingCart] = useState(false);
 
@@ -45,9 +45,13 @@ export const TopMenu = () => {
             {/* Icons Actios Menu */}
             <div className='flex items-center'>
                 <Link href='/search' className="mx-2">
-                    <IoSearchOutline  className='w-5 h-5'/>
+                    <IoSearchOutline className='w-5 h-5' />
                 </Link>
-                <Link href='/cart' className="mx-2">
+                <Link href={
+                    (totalItemsinCart === 0 && isLoadingCart) ?
+                        '/empty' : '/cart'
+                }
+                    className="mx-2">
                     <div className='relative'>
                         {
                             (isLoadingCart && totalItemsinCart >= 0) ? (
@@ -55,19 +59,19 @@ export const TopMenu = () => {
                                     {totalItemsinCart}
                                 </span>
                             ) : (
-                                <span className='absolute text-xs rounded-full font-bold px-1 -top-2 -right-2 bg-blue-700 text-white'>
+                                <span className='absolute text-xs rounded-full font-bold px-1 -top-2 -right-2 bg-blue-700 text-white fade-in'>
                                     0
                                 </span>
                             )
                         }
-                        <IoCartOutline className='w-5 h-5'/>
+                        <IoCartOutline className='w-5 h-5' />
                     </div>
                 </Link>
 
                 <button
-                    onClick={() => openMenu() }
+                    onClick={() => openMenu()}
                     className='m-2 p-2 rounded-md transition-all hover:bg-gray-100'>
-                        Menu
+                    Menu
                 </button>
             </div>
         </nav>
