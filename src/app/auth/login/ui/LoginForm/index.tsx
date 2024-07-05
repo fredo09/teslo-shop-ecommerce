@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/actions';
+import { IoInformationOutline } from 'react-icons/io5';
+import clsx from 'clsx';
 
 export const LoginFrom = () => {
     const [state, dispatch] = useFormState(
@@ -11,7 +13,7 @@ export const LoginFrom = () => {
         undefined
     );
 
-    console.log("🚀 ~ LoginFrom ~ state:", {state});
+    console.log("🚀 ~ LoginFrom ~ state:", state);
 
     return (
         <form action={dispatch} className="flex flex-col">
@@ -32,13 +34,21 @@ export const LoginFrom = () => {
                 <input
                     className="px-5 py-2 border bg-gray-200 rounded mb-5"
                     type="email" /> */}
+            <div
+                className="flex h-8 items-end space-x-1 mb-5 justify-center"
+                aria-live="polite"
+                aria-atomic="true">
+                {state === 'CredentialsSignin' && (
+                    <>
+                        <IoInformationOutline className="h-5 w-5 text-red-500" />
+                        <p className="text-sm text-red-500">Credenciales Incorrectas</p>
+                    </>
+                )}
+            </div>
 
-            <button
-                type='submit'
-                className="btn-primary">
-                Ingresar
-            </button>
-
+            {/* Buton de login */}
+            <LoginButton />
+            
             {/* divisor l ine */}
             <div className="flex items-center my-5">
                 <div className="flex-1 border-t border-gray-500"></div>
@@ -51,7 +61,27 @@ export const LoginFrom = () => {
                 className="btn-secondary text-center">
                 Crear una nueva cuenta
             </Link>
-
         </form>
     )
+}
+
+
+function LoginButton() {
+    const { pending } = useFormStatus();
+
+    return(
+        <>
+            <button 
+                type='submit'
+                className={
+                    clsx("mt-4 w-full", {
+                        "btn-primary": !pending,
+                        "btn-disabled": pending
+                    })
+                }
+                disabled={pending}>
+                Ingresar
+            </button> 
+        </>
+    );
 }
