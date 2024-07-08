@@ -15,13 +15,23 @@ export async function authenticate(
 
         // await sleep(2);
 
-        console.log("🚀 ~ Object.fromEntries(formData):", Object.fromEntries(formData))
-        await signIn('credentials', Object.fromEntries(formData));
+        await signIn('credentials', {
+            ...Object.fromEntries(formData),
+            redirect: false,
+        });
+
+        console.log("🚀 ~ si ocurrio algo:");
+        return 'Success';
+
+
     } catch(error) {
+        console.log("🚀 ~ error:", error);
+        
+        return 'CredentialsSignin';
         // if ((error as Error).message.includes('CredentialsSignin')) {
             // }
         //throw error;
-        return 'CredentialsSignin';
+        //return 'Error desconocido 🤡';
     }
 }
 
