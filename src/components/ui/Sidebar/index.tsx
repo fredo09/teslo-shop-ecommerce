@@ -5,12 +5,17 @@ import Link from 'next/link'
 import clsx from 'clsx';
 import { useUiStore } from '@/store';
 import { logoutAction } from '@/actions';
+import { useSession } from 'next-auth/react';
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline, IoShirtOutline, IoTicketOutline } from 'react-icons/io5';
 
 export const SideBar = () => {
     // * Uso del store median un hook
     const isSideMenuOpen = useUiStore(state => state.isSideOpenMenu);
     const closeMenu = useUiStore(state => state.closeSideMenu);
+
+    //* hook para manejo de sesion useSession "next-auth/react" del lado del cliente
+    const { data: session } = useSession();
+    console.log("🚀 ~ SideBar ~ session:", session);
 
     return (
         <div>
