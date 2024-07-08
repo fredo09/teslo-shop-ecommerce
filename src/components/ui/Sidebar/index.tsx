@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import clsx from 'clsx';
 import { useUiStore } from '@/store';
+import { logoutAction } from '@/actions';
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline, IoShirtOutline, IoTicketOutline } from 'react-icons/io5';
 
 export const SideBar = () => {
@@ -56,7 +57,8 @@ export const SideBar = () => {
                 {/* Items Links */}
 
                 <Link
-                    href="/"
+                    href="/profile"
+                    onClick={() => closeMenu() }
                     className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                     <IoPersonOutline size={25} />
                     <span className="ml-3 text-xl">Perfil</span>
@@ -70,20 +72,20 @@ export const SideBar = () => {
                 </Link>
 
                 <Link
-                    href="/"
+                    href="/auth/login"
+                    onClick={() => closeMenu()}
                     className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
                 >
                     <IoLogInOutline size={25} />
                     <span className="ml-3 text-xl">Ingresar</span>
                 </Link>
 
-                <Link
-                    href="/"
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-                >
+                <button
+                    onClick={ () => logoutAction() }
+                    className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
                     <IoLogOutOutline size={25} />
                     <span className="ml-3 text-xl">Salir</span>
-                </Link>
+                </button>
 
                 {/* Line Separator */}
                 <div className="w-full h-px bg-gray-200 my-10" />
