@@ -11,3 +11,6 @@ export * from './products';
 
 // * Components Prodcut
 export * from './product';
+
+// * Providers
+export * from './provider';
