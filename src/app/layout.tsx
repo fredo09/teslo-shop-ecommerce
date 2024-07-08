@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { inter } from '@/config/fonts';
 
 import "./globals.css";
+import { ProviderSessionAuth } from "@/components";
 
 export const metadata: Metadata = {
   title: {
-    // * -> Forma de como crear un template y usaro en titulo de todas las pages 
+    // * -> Forma de como crear un template y usarlo en titulo de todas las pages 
     template: '%s - Teslo | Shop',
     default: "Home - Teslo | Shop"
   },
@@ -19,7 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ProviderSessionAuth>
+          {children}
+        </ProviderSessionAuth>
+      </body>
     </html>
   );
 }
