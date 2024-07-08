@@ -3,6 +3,7 @@
  */
 
 export * from './Footer';
+export * from './Loading';
 export * from './Not-Found';
 export * from './Pagination';
 export * from './TopMenu';
