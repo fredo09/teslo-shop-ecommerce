@@ -15,7 +15,19 @@ export const SideBar = () => {
 
     //* hook para manejo de sesion useSession "next-auth/react" del lado del cliente
     const { data: session } = useSession();
-    console.log("🚀 ~ SideBar ~ session:", session);
+    //console.log("🚀 ~ SideBar ~ session:", session);
+
+    //* hacemos docle negacion usando !! para ver si hay usuario o no
+    const isAuthenticate = !!session?.user;
+
+
+    //* recargar sidebar 
+    const logutSidebar = async () => {
+        console.log("🚀 ~ se ha llamado?:");
+        await logoutAction();
+        window.location.replace('/');
+        closeMenu();
+    }
 
     return (
         <div>
@@ -76,21 +88,31 @@ export const SideBar = () => {
                     <span className="ml-3 text-xl">Ordenes</span>
                 </Link>
 
-                <Link
-                    href="/auth/login"
-                    onClick={() => closeMenu()}
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-                >
-                    <IoLogInOutline size={25} />
-                    <span className="ml-3 text-xl">Ingresar</span>
-                </Link>
+                {/* Si esta autenticado mostrar el boton de salir */}
+                {
+                    isAuthenticate && (
+                        <button
+                            onClick={() => logutSidebar() }
+                            className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                            <IoLogOutOutline size={25} />
+                            <span className="ml-3 text-xl">Salir</span>
+                        </button>
+                    )
+                }
 
-                <button
-                    onClick={ () => logoutAction() }
-                    className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                    <IoLogOutOutline size={25} />
-                    <span className="ml-3 text-xl">Salir</span>
-                </button>
+                {/* Si no lo esta mostrar el boton de ingresar */}
+                {
+                    !isAuthenticate && (
+                        <Link
+                            href="/auth/login"
+                            onClick={() => closeMenu()}
+                            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                        >
+                            <IoLogInOutline size={25} />
+                            <span className="ml-3 text-xl">Ingresar</span>
+                        </Link>
+                    )
+                }
 
                 {/* Line Separator */}
                 <div className="w-full h-px bg-gray-200 my-10" />
