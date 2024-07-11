@@ -28,56 +28,52 @@ export const LoginFrom = () => {
 
 
     return (
-        <>
-            <form action={dispatch} className="flex flex-col">
+        <form action={dispatch} className="flex flex-col">
 
-                <label htmlFor="email">Correo electrónico</label>
-                <input
-                    className="px-5 py-2 border bg-gray-200 rounded mb-5"
-                    name='email'
-                    type="email" />
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+                className="px-5 py-2 border bg-gray-200 rounded mb-5"
+                name='email'
+                type="email" />
 
-                <label htmlFor="email">Contraseña</label>
-                <input
-                    className="px-5 py-2 border bg-gray-200 rounded mb-5"
-                    name='password'
-                    type="password" />
+            <label htmlFor="email">Contraseña</label>
+            <input
+                className="px-5 py-2 border bg-gray-200 rounded mb-5"
+                name='password'
+                type="password" />
 
-                {/* <label htmlFor="email">Repetir Contraseña</label>
+            {/* <label htmlFor="email">Repetir Contraseña</label>
                     <input
                         className="px-5 py-2 border bg-gray-200 rounded mb-5"
                         type="email" /> */}
-                <div
-                    className="flex h-8 items-end space-x-1 mb-5 justify-center"
-                    aria-live="polite"
-                    aria-atomic="true">
-                    {state === 'CredentialsSignin' && (
-                        <>
-                            <IoInformationOutline className="h-5 w-5 text-red-500" />
-                            <p className="text-sm text-red-500">Credenciales Incorrectas</p>
-                        </>
-                    )}
-                </div>
+            <div
+                className="flex h-8 items-end space-x-1 mb-5 justify-center"
+                aria-live="polite"
+                aria-atomic="true">
+                {state === 'CredentialsSignin' && (
+                    <>
+                        <IoInformationOutline className="h-5 w-5 text-red-500" />
+                        <p className="text-sm text-red-500">Credenciales Incorrectas</p>
+                    </>
+                )}
+            </div>
 
-                {/* Buton de login */}
-                <LoginButton />
+            {/* Buton de login */}
+            <LoginButton />
 
-                {/* divisor l ine */}
-                <div className="flex items-center my-5">
-                    <div className="flex-1 border-t border-gray-500"></div>
-                    <div className="px-2 text-gray-800">O</div>
-                    <div className="flex-1 border-t border-gray-500"></div>
-                </div>
+            {/* divisor l ine */}
+            <div className="flex items-center my-5">
+                <div className="flex-1 border-t border-gray-500"></div>
+                <div className="px-2 text-gray-800">O</div>
+                <div className="flex-1 border-t border-gray-500"></div>
+            </div>
 
-                <Link
-                    href="/auth/new-account"
-                    className="btn-secondary text-center">
-                    Crear una nueva cuenta
-                </Link>
-            </form>
-
-
-        </>
+            <Link
+                href="/auth/new-account"
+                className="btn-secondary text-center">
+                Crear una nueva cuenta
+            </Link>
+        </form>
     )
 }
 
