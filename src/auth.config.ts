@@ -29,7 +29,7 @@ export const authConfig: NextAuthConfig = {
         session({ session, token, user }) {
             // console.log("🚀 ~ contenido del callsbacks and sesiones :" , { token, session, user });
 
-            //* recuperamos la data del token y lo asignamos a la data de la sesion
+            //* -> recuperamos la data del token y lo asignamos a la data de la sesion
             session.user = token.data as any;
             return session;
         },
