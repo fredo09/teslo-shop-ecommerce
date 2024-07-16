@@ -20,6 +20,8 @@ export const SideBar = () => {
     //* hacemos docle negacion usando !! para ver si hay usuario o no
     const isAuthenticate = !!session?.user;
 
+    const isAdmin = (session?.user.role === 'admin' );
+
 
     //* recargar sidebar 
     const logutSidebar = async () => {
@@ -73,20 +75,26 @@ export const SideBar = () => {
 
                 {/* Items Links */}
 
-                <Link
-                    href="/profile"
-                    onClick={() => closeMenu() }
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                    <IoPersonOutline size={25} />
-                    <span className="ml-3 text-xl">Perfil</span>
-                </Link>
+                {
+                    isAuthenticate && (
+                        <>
+                            <Link
+                                href="/profile"
+                                onClick={() => closeMenu()}
+                                className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                                <IoPersonOutline size={25} />
+                                <span className="ml-3 text-xl">Perfil</span>
+                            </Link>
 
-                <Link
-                    href="/"
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
-                    <IoTicketOutline size={25} />
-                    <span className="ml-3 text-xl">Ordenes</span>
-                </Link>
+                            <Link
+                                href="/"
+                                className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all">
+                                <IoTicketOutline size={25} />
+                                <span className="ml-3 text-xl">Ordenes</span>
+                            </Link>
+                        </>
+                    )
+                }
 
                 {/* Si esta autenticado mostrar el boton de salir */}
                 {
@@ -114,31 +122,37 @@ export const SideBar = () => {
                     )
                 }
 
-                {/* Line Separator */}
-                <div className="w-full h-px bg-gray-200 my-10" />
+                {
+                    isAdmin && (
+                        <>
+                            {/* Line Separator */}
+                            <div className="w-full h-px bg-gray-200 my-10" />
 
-                <Link
-                    href='/'
-                    className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all'>
-                    <IoShirtOutline size={25} />
-                    <span className="ml-3 text-xl">Productos</span>
-                </Link>
+                            <Link
+                                href='/'
+                                className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all'>
+                                <IoShirtOutline size={25} />
+                                <span className="ml-3 text-xl">Productos</span>
+                            </Link>
 
-                <Link
-                    href="/"
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-                >
-                    <IoTicketOutline size={25} />
-                    <span className="ml-3 text-xl">Ordenes</span>
-                </Link>
+                            <Link
+                                href="/"
+                                className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            >
+                                <IoTicketOutline size={25} />
+                                <span className="ml-3 text-xl">Ordenes</span>
+                            </Link>
 
-                <Link
-                    href="/"
-                    className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-                >
-                    <IoPeopleOutline size={25} />
-                    <span className="ml-3 text-xl">Usuarios</span>
-                </Link>
+                            <Link
+                                href="/"
+                                className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+                            >
+                                <IoPeopleOutline size={25} />
+                                <span className="ml-3 text-xl">Usuarios</span>
+                            </Link>
+                        </>
+                    )
+                }
 
             </nav>
         </div>
