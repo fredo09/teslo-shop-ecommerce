@@ -69,7 +69,7 @@ export const LoginFrom = () => {
             </div>
 
             <Link
-                href="/auth/new-account"
+                href="/auth/newAccount"
                 className="btn-secondary text-center">
                 Crear una nueva cuenta
             </Link>
