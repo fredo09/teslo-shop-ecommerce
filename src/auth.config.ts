@@ -14,6 +14,26 @@ export const authConfig: NextAuthConfig = {
         signIn: '/auth/login',
         newUser: '/auth/newAccount'
     },
+    callbacks: {
+        //! funciones que se necesitan ejecutar para manejar el "usuario, token y sesion"
+        jwt({ token, user }) {
+            // console.log("🚀 ~ contenido del callsbacks and jwt :", { token, user });
+
+            //! validamos que el usuario no sea nulo ya que esto se envia muchas veces y asi setearle la data en el token
+            if (user) {
+                token.data = user;
+            }
+
+            return token;
+        },
+        session({ session, token, user }) {
+            // console.log("🚀 ~ contenido del callsbacks and sesiones :" , { token, session, user });
+
+            //* recuperamos la data del token y lo asignamos a la data de la sesion
+            session.user = token.data as any;
+            return session;
+        },
+    },
     providers: [
         //! login con credenciales de email y contraseña
         Credentials({
@@ -43,7 +63,6 @@ export const authConfig: NextAuthConfig = {
 
                 //* Regresar el usuario informacion necesaria sin password
                 const { password: _ , ...rest } = userDb;
-                console.log("🚀 ~ authorize ~ rest:", rest);
                 return rest;
             },
         }),
