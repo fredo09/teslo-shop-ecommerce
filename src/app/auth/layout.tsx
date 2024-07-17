@@ -3,6 +3,7 @@
 */
 
 import { auth } from "@/auth.config";
+import { ToastNotification } from "@/components";
 import { redirect } from "next/navigation";
 
 export default async function authLayout({ children }: { children: React.ReactNode; }) {
@@ -20,6 +21,9 @@ export default async function authLayout({ children }: { children: React.ReactNo
             <div className="w-full sm:w-[350px] px-10">
                 {children}
             </div>
+
+            {/* ToastNotification */}
+            <ToastNotification />
         </main>
     );
 }
