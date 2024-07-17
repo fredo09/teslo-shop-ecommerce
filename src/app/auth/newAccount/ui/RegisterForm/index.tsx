@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import toast from 'react-hot-toast';
-import { RegisterAccountAcction } from '@/actions';
+import { RegisterAccountAcction, loginAction } from '@/actions';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormInputs = {
@@ -46,8 +46,16 @@ export const RegisterForm = () => {
             return;
         }
 
-        console.log("🚀 ~ Se ha creado el usuario:", { response });
-        toast.success(`${response.message}`)
+        if (response.user) {
+            await loginAction(email.toLowerCase(), password);
+
+            console.log("🚀 ~ Se ha creado el usuario:", { response });
+            toast.success(`${response.message}`);
+
+            window.location.replace('/');
+            return;
+        }
+
     };
 
 
