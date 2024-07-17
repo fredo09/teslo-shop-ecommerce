@@ -58,3 +58,26 @@ export async function authenticate(
 //         throw error;
 //     }
 // }
+
+/*
+ * Se usa para hacer la autentificacion despues de registrar un nuevo usuario
+ * @param name string
+ * @param password string
+ * @returns {Object}
+ */
+export const loginAction = async( email: string, password: string ) => {
+    try {
+        await signIn('credentials', { email, password })
+
+        return {
+            ok: true,
+            message: 'El usuario esta registrado! ✅ '
+        }
+    } catch (error) {
+        console.log("🚀 ~ ocurrio un error :", error);
+        return {
+            ok: false,
+            message: 'Ocurrio un error en la autentificaion!! ❌ '
+        }
+    }
+};
