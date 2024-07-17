@@ -2,13 +2,14 @@
  * Register Form
  * -> aqui se usa el paquete de React Hook Form
  */
-
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import clsx from 'clsx';
+import toast from 'react-hot-toast';
+import { RegisterAccountAcction } from '@/actions';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormInputs = {
     name: string;
@@ -18,6 +19,7 @@ type FormInputs = {
 }
 
 export const RegisterForm = () => {
+    const [errorMessage, setErrorMessage] = useState('');
 
     /*
      * Aqui usamos el hook de 'react-hook-form'
@@ -29,11 +31,23 @@ export const RegisterForm = () => {
 
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+        setErrorMessage('');
         const { name, password, email, repitePassword } = data;
 
         console.log("🚀 ~ mostrando data del submit :", { name, password, email, repitePassword });
 
         //TODO: AGREGAR SERVERACTIONS
+
+        const response = await RegisterAccountAcction(name, password, email);
+
+        if (!response.ok) {
+            setErrorMessage(response.message)
+            toast.error(`${response.message}`);
+            return;
+        }
+
+        console.log("🚀 ~ Se ha creado el usuario:", { response });
+        toast.success(`${response.message}`)
     };
 
 
@@ -89,6 +103,8 @@ export const RegisterForm = () => {
                 {...register('repitePassword', { required: true }) }
                 className="px-5 py-2 border bg-gray-200 rounded mb-5"
                 type="password" /> */}
+
+            <span className="text-red-500">{errorMessage} </span>
 
             <button
 
