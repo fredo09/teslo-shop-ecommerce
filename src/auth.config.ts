@@ -15,6 +15,24 @@ export const authConfig: NextAuthConfig = {
         newUser: '/auth/newAccount'
     },
     callbacks: {
+
+        //! Middleware para redireccion de rutas cuando el usuario esta autentificado 
+        //! Funciona actualmente
+        authorized({ auth, request: { nextUrl } }) {
+
+            console.log("🚀 ~ auth value :", { auth });
+
+            // const isLoggedIn = !!auth?.user;
+            // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+            // if (isOnDashboard) {
+            //     if (isLoggedIn) return true;
+            //     return false; // Redirect unauthenticated users to login page
+            // } else if (isLoggedIn) {
+            //     return Response.redirect(new URL('/dashboard', nextUrl));
+            // }
+            return true;
+        },
+
         //! funciones que se necesitan ejecutar para manejar el "usuario, token y sesion"
         jwt({ token, user }) {
             // console.log("🚀 ~ contenido del callsbacks and jwt :", { token, user });
