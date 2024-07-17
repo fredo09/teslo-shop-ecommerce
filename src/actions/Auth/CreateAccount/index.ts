@@ -1,4 +1,4 @@
-'use serve';
+'use server';
 
 import prisma from "@/lib/prisma";
 import bycrypt from 'bcryptjs';
@@ -21,7 +21,7 @@ export const RegisterAccountAcction = async (name: string, password: string, ema
         return {
             ok: true,
             user: createNewAccount,
-            message: 'Usuario creado! '
+            message: 'Usuario creado! 😎 '
         }
 
     } catch(error) {
