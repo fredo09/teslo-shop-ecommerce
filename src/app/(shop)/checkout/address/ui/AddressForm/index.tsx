@@ -5,10 +5,11 @@
 //TODO: USAR ESTE FORMUARIO PARA REGISTRAR CUALQUER DIRECCION 
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { Country } from '@/interfaces';
 import { useForm } from 'react-hook-form';
+import { useAddressFormStore } from '@/store';
 
 type inputForms = {
     firstName: string;
@@ -27,15 +28,26 @@ interface Props {
 }
 
 export const AddressForm = ( { countries }: Props ) => {
-    const { handleSubmit, register, formState: { isValid } } = useForm<inputForms>({
+    const { handleSubmit, register, formState: { isValid }, reset } = useForm<inputForms>({
         defaultValues: {
             //Todo: leer de la base de datos
         }
     });
 
+    const setAddressStore = useAddressFormStore( state => state.addAddressStore );
+    const addressStore = useAddressFormStore( state => state.addressState );
+
+    //! useEffect para resetear el formulario si hay info del store
+    useEffect(() => {
+        if (addressStore && addressStore.firstName) {
+            reset(addressStore);
+        }
+    }, [addressStore, reset]); 
+
+
     const onSubmit = ( data: inputForms ) => {
         console.log("🚀 ~ viendo mi data del formularios:", data);
-
+        setAddressStore(data);
     }
 
     return (
