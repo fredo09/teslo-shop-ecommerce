@@ -80,9 +80,34 @@ model User {
   password      String
   role          Roles     @default(user)
   image         String?
+
+
+  //* referencia de relacion de uno a uno con UserAddress model
+  address UserAddress?
 }
 
 model Countries {
   id   String @id
   name String
+
+  UserAddress UserAddress[] //! -> hace la referencia de que tendra alguna reliacion con algun modelo
+}
+
+model UserAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  city       String
+  phone      String
+
+  //Relaciones
+  country Countries @relation(fields: [countryId], references: [id]) //! hacemos la declaracion de la relacion con el nomnbre del campo "relacion de muchos"
+  countryId String
+
+  //! Relacion de muchos a muchos
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique
 }
