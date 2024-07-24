@@ -81,3 +81,8 @@ model User {
   role          Roles     @default(user)
   image         String?
 }
+
+model Countries {
+  id   String @id
+  name String
+}
