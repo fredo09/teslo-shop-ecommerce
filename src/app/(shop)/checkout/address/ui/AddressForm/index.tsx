@@ -5,11 +5,12 @@
 //TODO: USAR ESTE FORMUARIO PARA REGISTRAR CUALQUER DIRECCION 
 'use client';
 
-import clsx from 'clsx';
 import React from 'react';
+import clsx from 'clsx';
+import { Country } from '@/interfaces';
 import { useForm } from 'react-hook-form';
 
-interface inputForms {
+type inputForms = {
     firstName: string;
     lastName: string;
     address: string;
@@ -21,7 +22,11 @@ interface inputForms {
     rememberAddress: boolean;
 }
 
-export const AddressForm = () => {
+interface Props {
+    countries: Country[];
+}
+
+export const AddressForm = ( { countries }: Props ) => {
     const { handleSubmit, register, formState: { isValid } } = useForm<inputForms>({
         defaultValues: {
             //Todo: leer de la base de datos
@@ -90,7 +95,11 @@ export const AddressForm = () => {
                     className="p-2 border rounded-md bg-gray-200" { ...register('country', { required: true }) }
                 >
                     <option value="">[ Seleccione ]</option>
-                    <option value="CRI">Costa Rica</option>
+                    {
+                        countries.map( ({ id, name }) => (
+                            <option key={id} value={ id }>{name}</option>
+                        ))
+                    }
                 </select>
             </div>
 
