@@ -7,9 +7,12 @@
 
 import React, { useEffect } from 'react';
 import clsx from 'clsx';
-import { Country } from '@/interfaces';
+import type { Address, Country } from '@/interfaces';
 import { useForm } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
 import { useAddressFormStore } from '@/store';
+import { deleteUserAddressAction, setUserAddressAction } from '@/actions';
+import { useRouter } from 'next/navigation';
 
 type inputForms = {
     firstName: string;
@@ -25,29 +28,55 @@ type inputForms = {
 
 interface Props {
     countries: Country[];
+    userAddress?: Partial<Address>;  //! -> con Partial en typescript indicamos que un objeto puede ser vacion
 }
 
-export const AddressForm = ( { countries }: Props ) => {
+export const AddressForm = ({ countries, userAddress = {} }: Props ) => {
     const { handleSubmit, register, formState: { isValid }, reset } = useForm<inputForms>({
         defaultValues: {
             //Todo: leer de la base de datos
+            ...(userAddress as any),
+            rememberAddress: false
         }
     });
 
+    //* Navegacion de rutas con componentes de tipo client en next 
+    const route = useRouter();
+
+    //*recuperamos el userId mediente la useSession hook auth
+    const { data: sessionData } = useSession({
+        required: true // ! -> redirecciona cuando el usuario no esta autenticado
+    });
+
+    // *  Store address
     const setAddressStore = useAddressFormStore( state => state.addAddressStore );
     const addressStore = useAddressFormStore( state => state.addressState );
+
+    console.log("🚀 ~ ver la sesion :", sessionData?.user.id);
 
     //! useEffect para resetear el formulario si hay info del store
     useEffect(() => {
         if (addressStore && addressStore.firstName) {
-            reset(addressStore);
+            reset(addressStore); // * -> serve para resetar el formualario 
         }
     }, [addressStore, reset]); 
 
 
-    const onSubmit = ( data: inputForms ) => {
-        console.log("🚀 ~ viendo mi data del formularios:", data);
+    const onSubmit = async( data: inputForms ) => {
         setAddressStore(data);
+
+        const { rememberAddress, ...restData } = data;
+
+        if (rememberAddress) {
+            //TODO: SERVER ACTIONS
+            await setUserAddressAction( sessionData!.user.id, restData);
+        } else {
+            //TODO: SERVER ACTIONS
+            console.log("🚀 ~ entro aqui!!:");
+            await deleteUserAddressAction( sessionData!.user.id )
+        }
+
+        route.push('/checkout');
     }
 
     return (
@@ -168,8 +197,7 @@ export const AddressForm = ( { countries }: Props ) => {
                             "btn-primary": isValid,
                             "btn-disabled": !isValid
                         })
-                    }
-                    >
+                    }>
                     Siguiente
                 </button>
             </div>
