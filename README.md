@@ -83,12 +83,24 @@ Para llenar la base de datos con datos de prueba esto de **ambiente de desarroll
 npm run dev:seed
 ```
 
+> [!IMPORTANT]
+> Recuerda que debes de limpiar el localStorage para evitar cualquier conflicto en la apliacion
+> y el uso de la infor de  base de datos.
+
 ### 7.- Levantar el proyecto.
 
 Y finalmente para levantar el proyecto usa el siguiente comando usando **turbo-webpack**:
 
 ```bash
 npm run dev:turbo
+```
+
+> [!WARNING]
+> De momento no usar el comando anteriror ya que surge unproblema al consumir la api para la autentificacion
+> Se recomienda de momento usar solamente el siguiente comando.
+
+```bash
+npm run dev
 ```
 
 ## Ejecutando las Pruebas ⚙️
