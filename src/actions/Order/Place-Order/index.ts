@@ -15,12 +15,11 @@ interface ProductInOrder {
 
 export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address: Address ) => {
     try {
-        //TODO: SERVER ACTIONS FOR ORDER
-
         //! Verificacion de usuario existente "sesion"
         const sessionUser = await auth();
+        const userId = sessionUser?.user.id;
 
-        if (!sessionUser?.user.id) {
+        if (!userId) {
             return {
                 ok: false,
                 message:"Ocurrio un error 🤡"
@@ -72,9 +71,40 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
             
             //* 1.- Actualizar el stock de los productos
             //* 2.- Crear la orden  - encabezado - detalles
+            const order = await tx.order.create({
+                data: {
+                    userId: userId,
+                    itemsInOrder: countItems,
+                    subTotal: subTotal,
+                    tax: tax,
+                    total: total,
+
+
+                    //* OrderItems -> productos que tiene el carrio 
+                    OrderItem: {
+                        createMany: { // se hace para meter mas registros dentro de otro 
+                            data: itemsToOrder.map( productItem => ({
+                                quantity: productItem.quantity,
+                                size: productItem.size,
+                                productId: productItem.id,
+                                price: productsDB.find( productFind => productFind.id === productItem.id )?.price ?? 0
+                            }))
+                        }
+                    }
+                }
+            });
+            //console.log("🚀 ~ hemos creado la orden:", { order });
+            //? validar si el price devuelve 0 "opcional"
+
+
             //* 3.- Crear la direccion de la orde
             
-            
+
+            return {
+                order: order,
+                updateProducts: [],
+                orderAddress: {}
+            }            
         });
 
 
