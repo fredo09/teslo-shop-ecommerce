@@ -101,7 +101,7 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
                     if (product.inStock < 0) {
                         //No hay productos que vender
                         console.log("🚀 ~ No hay productos que vender 🤡:", product.inStock);
-                        throw new Error(`${product.title} no contamos con el producto por el momento 😦`);
+                        throw new Error(`El producto "${product.title}" no esta disponible por el momento 😦`);
                     }
                 });
 
@@ -177,6 +177,7 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
             console.log("🚀 ~ Ocurrio un error en la transaccion 🤡:", error);
             return {
                 ok: false,
+                deatialError:error?.message,
                 message: "Ocurrio un error al momento de hacer tu orden"
             }
         }
