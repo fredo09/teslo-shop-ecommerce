@@ -67,6 +67,15 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
         console.log("🚀 ~ Calculando subTotal, tax y total:", { subTotal, tax, total });
 
         //!Crear la transaccion a la DB
+        const OrderTX = await prisma.$transaction( async (tx) => {
+            //! especificar pasos de la transaccion
+            
+            //* 1.- Actualizar el stock de los productos
+            //* 2.- Crear la orden  - encabezado - detalles
+            //* 3.- Crear la direccion de la orde
+            
+            
+        });
 
 
     } catch (error) {
