@@ -59,7 +59,7 @@ model Product {
 
   //* relacion referencias
   imageProduct ImageProduct[]
-  OrderItem OrderItem[]
+  OrderItem    OrderItem[]
 
   @@index([gender])
 }
@@ -82,10 +82,9 @@ model User {
   role          Roles     @default(user)
   image         String?
 
-
   //* referencia de relacion de uno a uno con UserAddress model
   address UserAddress?
-  Order Order[] //! relacion de uno a muchos "hace referencia"
+  Order   Order[] //! relacion de uno a muchos "hace referencia"
 }
 
 model Countries {
@@ -93,7 +92,7 @@ model Countries {
   name String
 
   //* Referencias de union de tablas
-  UserAddress UserAddress[] //! -> hace la referencia de que tendra alguna reliacion con algun modelo
+  UserAddress  UserAddress[] //! -> hace la referencia de que tendra alguna reliacion con algun modelo
   OrderAddress OrderAddress[]
 }
 
@@ -108,14 +107,13 @@ model UserAddress {
   phone      String
 
   //Relaciones
-  country Countries @relation(fields: [countryId], references: [id]) //! hacemos la declaracion de la relacion con el nomnbre del campo "relacion de muchos"
+  country   Countries @relation(fields: [countryId], references: [id]) //! hacemos la declaracion de la relacion con el nomnbre del campo "relacion de muchos"
   countryId String
 
   //! Relacion de muchos a muchos
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 }
-
 
 //! Orden de compras
 
@@ -126,7 +124,7 @@ model Order {
   tax          Float
   total        Float
   itemsInOrder Int
-  isPaid       Boolean
+  isPaid       Boolean   @default(false)
   paidAt       DateTime?
 
   createdAt DateTime @default(now())
@@ -137,7 +135,7 @@ model Order {
   userId String
 
   //Referencias a relaicicon entre tablas o modelos
-  OrderItem OrderItem[]
+  OrderItem    OrderItem[]
   OrderAddress OrderAddress? //* -> en referencias decimos que sera una union de uno a unos cuando quitamos "[]"
 }
 
