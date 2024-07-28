@@ -4,10 +4,11 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { useAddressFormStore, useCartStore } from '@/store';
-import { currencyFormat } from '@/utils';
 import { clsx } from 'clsx';
-import { ProductInCart } from '@/app/(shop)/cart/ui/ProductInCart';
+import { currencyFormat } from '@/utils';
+import { useAddressFormStore, useCartStore } from '@/store';
+import { PlaceOrderActions } from '@/actions';
+
 
 export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
@@ -40,6 +41,7 @@ export const PlaceOrder = () => {
     // await sleep(5);
 
     //TODO: HACER SERVER ACTIONS PARA LA TRANSACCION A LA DB
+    await PlaceOrderActions(productsToOrder, getAddressStore);
 
     setIsBlockedButton(false);
   };

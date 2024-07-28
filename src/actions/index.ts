@@ -5,4 +5,5 @@
 export * from './Address';
 export * from './Auth';
 export * from './Countries';
+export * from './Order';
 export * from './Product';
