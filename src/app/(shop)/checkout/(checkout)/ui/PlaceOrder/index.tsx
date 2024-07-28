@@ -8,10 +8,15 @@ import { clsx } from 'clsx';
 import { currencyFormat } from '@/utils';
 import { useAddressFormStore, useCartStore } from '@/store';
 import { PlaceOrderActions } from '@/actions';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 
 export const PlaceOrder = () => {
+  const route = useRouter();
+
   const [loaded, setLoaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isBlockedButton, setIsBlockedButton] = useState(false);
 
   //* store address , summary
@@ -19,6 +24,7 @@ export const PlaceOrder = () => {
   const getSummaryInfo = useCartStore(state => state.getSummaryInformation());
 
   const cartInStoreToOrder = useCartStore(state => state.cart);
+  const clearCartStore = useCartStore( state => state.clearCart )
 
   useEffect(() => {
     if (getAddressStore) {
@@ -38,12 +44,25 @@ export const PlaceOrder = () => {
 
     console.log("🚀 ~ mi contenido a mandar a server para ordenar:", { getAddressStore, productsToOrder });
 
-    // await sleep(5);
-
     //TODO: HACER SERVER ACTIONS PARA LA TRANSACCION A LA DB
-    await PlaceOrderActions(productsToOrder, getAddressStore);
+    const response = await PlaceOrderActions(productsToOrder, getAddressStore);
+    console.log("🚀 ~ onPlaceOrder ~ response:", response)
 
-    setIsBlockedButton(false);
+
+    if (!response?.ok) {
+      setIsBlockedButton(false);
+
+      setErrorMessage(response?.deatialError);
+
+      toast.error(`${response?.deatialError}`);
+      return;
+    }
+
+    //! todo salido bien y limpiamos el carrito
+    clearCartStore();
+    
+    //hacemos redireccion de la page con el id de la orden
+    route.replace(`/orders/${response?.orden?.id}`);
   };
 
 
@@ -105,9 +124,9 @@ export const PlaceOrder = () => {
           </span>
         </p>
 
-        {/* <div>
-          <p className='text-red-500 font-bold'>Error al generar la orden</p>
-        </div> */}
+        <div>
+          <p className='text-red-500 font-bold m-5'>{ errorMessage }</p>
+        </div>
 
         <button
           onClick={onPlaceOrder}
