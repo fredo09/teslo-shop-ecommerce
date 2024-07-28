@@ -66,7 +66,7 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
         console.log("🚀 ~ Calculando subTotal, tax y total:", { subTotal, tax, total });
 
         //!Crear la transaccion a la DB
-        const OrderTX = await prisma.$transaction( async (tx) => {
+        const orderTX = await prisma.$transaction( async (tx) => {
             //! especificar pasos de la transaccion
             
             //* 1.- Actualizar el stock de los productos
@@ -96,15 +96,33 @@ export const PlaceOrderActions = async ( itemsToOrder: ProductInOrder[], address
             //console.log("🚀 ~ hemos creado la orden:", { order });
             //? validar si el price devuelve 0 "opcional"
 
+            //* 3.- Crear la direccion de la order
+            const idCountry = address.country;
 
-            //* 3.- Crear la direccion de la orde
+            const addressOrder = await tx.orderAddress.create({
+                data: {
+                    firstName: address.firstName,
+                    lastName: address.lastName,
+                    address: address.address,
+                    address2: address.address2,
+                    phone: address.phone,
+                    postalCode: address.postalCode,
+                    city: address.city,
+
+                    //CountryId
+                    countryId: idCountry,
+
+                    //OrderId
+                    orderId: order.id,
+
+                }
+            });
             
-
             return {
                 order: order,
                 updateProducts: [],
-                orderAddress: {}
-            }            
+                orderAddress: addressOrder
+            }          
         });
 
 
