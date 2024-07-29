@@ -7,6 +7,7 @@
 import React from 'react';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { CreateOrderData, CreateOrderActions } from '@paypal/paypal-js';
+import { setTransactionPaypalIdAction } from '@/actions';
 
 interface Props {
     orderId: string;
@@ -34,7 +35,6 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
      * @returns {String} transactionId
      */
     const createOrder = async (data: CreateOrderData, actions: CreateOrderActions): Promise<string> => {
-        console.log("🚀 ~ hemos generado algo aqui??? :");
         const transactionsPaypalId = await actions.order.create({
             intent: 'CAPTURE',
             purchase_units: [
@@ -50,8 +50,12 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
         console.log("🚀 ~ createOrder ~ transactionsPaypalId:", transactionsPaypalId);
 
         //TODO: GUARDAR EL ID DE PAYPAL EN LA BASDE DE DATOS "SETTRANSACTIONPAYPALID"
-        
+        const { ok, order } = await setTransactionPaypalIdAction(orderId, transactionsPaypalId);
+        console.log("🚀 ~ createOrder ~ order:", order);
 
+        if (!ok) {
+            throw new Error('no se pudo hacer la transaccion');
+        }
 
         return transactionsPaypalId;
     }
