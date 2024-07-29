@@ -7,10 +7,15 @@ import { initialData } from "./seed";
 import { countries } from './seed-country';
 
 async function main() {
+    await prisma.orderAddress.deleteMany();
+    await prisma.orderItem.deleteMany();
+    await prisma.order.deleteMany();
+
     await prisma.userAddress.deleteMany();
     await prisma.imageProduct.deleteMany();
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
+    
     await prisma.user.deleteMany();
     await prisma.countries.deleteMany();
 

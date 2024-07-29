@@ -28,6 +28,9 @@ interface State {
     updateProductQuantity: ( product: CartStore, quantity: number ) => void;
     //Todo: removeProductToCart
     removeProductToCart: ( product: CartStore ) => void;
+
+    //* Limpiar carrito
+    clearCart: () => void;
 }
 
 
@@ -128,6 +131,11 @@ export const useCartStore = create<State>()(
                 console.log("🚀 ~ removeProductCart:", removeProductCart)
 
                 set({ cart: removeProductCart })
+            },
+
+            //* Limpiar carrito
+            clearCart: () => {
+                set({ cart: [] });
             }
         })
         ,{

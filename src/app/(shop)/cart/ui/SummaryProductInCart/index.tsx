@@ -36,7 +36,7 @@ export const SummaryProductInCart = () => {
         <div className="grid grid-cols-2">
             <span>Cantidad </span>
             <span className="text-right">
-                {getSummaryInfo.itemIncartSummary === 1 ? '1 Productos' : `${getSummaryInfo.itemIncartSummary} productos` }
+                {getSummaryInfo.itemIncartSummary === 1 ? '1 Productos' : `${getSummaryInfo.itemIncartSummary} articulos` }
             </span>
 
             <span>Subtotal</span>
@@ -46,7 +46,7 @@ export const SummaryProductInCart = () => {
             <span className="text-right">$ { currencyFormat(getSummaryInfo.impuesto)}</span>
 
             <span className="mt-5 text-2xl">Total</span>
-            <span className="mt-5 text-x2l text-right">$ {currencyFormat(getSummaryInfo.totalProductInCart)}</span>
+            <span className="mt-5 text-2xl text-right">$ {currencyFormat(getSummaryInfo.totalProductInCart)}</span>
         </div>
     )
 }

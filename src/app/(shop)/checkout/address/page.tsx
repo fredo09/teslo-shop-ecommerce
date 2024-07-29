@@ -8,7 +8,7 @@ import { AddressForm } from './ui/AddressForm';
 import { getAddressUserAcction, getCountriesAction } from '@/actions';
 
 //Interfaces
-import { Country } from '@/interfaces';
+import type { Country } from '@/interfaces';
 
 export default async function AddressPage() { 
 
