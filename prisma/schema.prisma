@@ -137,6 +137,9 @@ model Order {
   //Referencias a relaicicon entre tablas o modelos
   OrderItem    OrderItem[]
   OrderAddress OrderAddress? //* -> en referencias decimos que sera una union de uno a unos cuando quitamos "[]"
+
+  // * Identificador de pagos para terceros que regresa "paypal" relacionado con la orden generada
+  transactionPaypalId String?
 }
 
 model OrderItem {
