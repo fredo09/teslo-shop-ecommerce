@@ -6,9 +6,17 @@
 
 import React from 'react';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { CreateOrderData, CreateOrderActions } from '@paypal/paypal-js';
 
-export const PaypalButton = () => {
+interface Props {
+    orderId: string;
+    amount: number;
+}
+
+export const PaypalButton = ( { orderId, amount }: Props ) => {
     const [{ isPending }] = usePayPalScriptReducer();
+
+    const transformAmount = (Math.round(amount * 100)) / 100;
 
     if ( isPending ) {
         return(
@@ -19,8 +27,40 @@ export const PaypalButton = () => {
         );
     }
 
+    /*
+     * Generated OrderID of paypal
+     * @param data CreateOrderData
+     * @param actions CreateOrderActions
+     * @returns {String} transactionId
+     */
+    const createOrder = async (data: CreateOrderData, actions: CreateOrderActions): Promise<string> => {
+        console.log("🚀 ~ hemos generado algo aqui??? :");
+        const transactionsPaypalId = await actions.order.create({
+            intent: 'CAPTURE',
+            purchase_units: [
+                {
+                    //invoice_id: 'order_id' -> nueva version 'reference_id'
+                    amount: {
+                        value: `${transformAmount}`,
+                        currency_code: 'USD'
+                    }
+                }
+            ]
+        });
+        console.log("🚀 ~ createOrder ~ transactionsPaypalId:", transactionsPaypalId);
+
+        //TODO: GUARDAR EL ID DE PAYPAL EN LA BASDE DE DATOS "SETTRANSACTIONPAYPALID"
+        
+
+
+        return transactionsPaypalId;
+    }
+
     return (
-        <PayPalButtons>
+        <PayPalButtons
+            // onApprove={}
+            createOrder={createOrder}
+        >
         </PayPalButtons>
     )
 }

@@ -15,8 +15,6 @@ interface Props {
 }
 
 export const ProviderSessionAuth = ({ children }: Props) => {
-  console.log("🚀 ~ tenemos el enviroment de paypal??? :", process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? '');
-
   let clientPaypalId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ?? '';
 
   const OPTIONS_PAYPAL_PROVIDER = {
