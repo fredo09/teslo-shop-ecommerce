@@ -13,4 +13,4 @@ export * from './products';
 export * from './product';
 
 // * Providers
-export * from './provider';
+export * from './providers';

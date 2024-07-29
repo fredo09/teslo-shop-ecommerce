@@ -1,5 +1,0 @@
-/** 
-* Providers
-*/
-
-export * from './ProviderSessionAuth';
