@@ -4,7 +4,7 @@
 
 import Image from 'next/image';
 import clsx from 'clsx';
-import { Title } from '@/components';
+import { PaypalButton, Title } from '@/components';
 import { redirect } from 'next/navigation';
 import { getOrderByIdAction } from '@/actions';
 import { IoCardOutline } from 'react-icons/io5';
@@ -121,7 +121,7 @@ export default async function OrderById({ params }: Props) {
                         </div>
 
                         <div className="mt-5 mb-2 w-full">
-                            <div className={
+                            {/* <div className={
                                 clsx(
                                     "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
                                     {
@@ -129,11 +129,14 @@ export default async function OrderById({ params }: Props) {
                                         'bg-green-700': orden!.isPaid,
                                     }
                                 )
-                            }>
-                                <IoCardOutline size={30} />
+                            }> */}
+                                {/* <IoCardOutline size={30} /> */}
                                 {/* <span className="mx-2">Pendiente de pago</span> */}
-                                <span className="mx-2">Pagada</span>
-                            </div>
+                                {/* <span className="mx-2">Pagada</span> */}
+                            {/* </div> */}
+                            
+                            {/* Paypal button */}
+                            <PaypalButton/>
                         </div>
                     </div>
                 </div>
