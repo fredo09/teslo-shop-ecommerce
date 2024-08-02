@@ -9,11 +9,16 @@ import { redirect } from 'next/navigation';
 import { getOrderByIdAction } from '@/actions';
 import { IoCardOutline } from 'react-icons/io5';
 import { currencyFormat, formartPhoneNumber } from '@/utils';
+import type { Metadata } from 'next';
 
 interface Props {
     params: {
         id: string;
     };
+}
+
+export const metadata: Metadata = {
+    title: 'Detalle de tu Compra'
 }
 
 //id de referencia: f20a86e7-0979-4f17-abc3-0e8360018f64 
@@ -31,7 +36,7 @@ export default async function OrderById({ params }: Props) {
     return (
         <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
             <div className="flex flex-col w-[1000px]">
-                <Title title={`Orden #${orden!.id}`} />
+                <Title title={`Tu Orden # ${orden!.id.split('-')[0]}`} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     {/* Carrito */}
                     <div className="flex flex-col mt-5">
