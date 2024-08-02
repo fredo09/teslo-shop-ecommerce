@@ -1,7 +1,6 @@
 /**
  * Paypal Button component
  */
-
 'use client';
 
 import React from 'react';
@@ -30,8 +29,8 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
 
     /*
      * Generated OrderID of paypal
-     * @param data CreateOrderData
-     * @param actions CreateOrderActions
+     * @param {Object} data CreateOrderData
+     * @param {Object} actions CreateOrderActions
      * @returns {String} transactionId
      */
     const createOrder = async (data: CreateOrderData, actions: CreateOrderActions): Promise<string> => {
@@ -62,8 +61,8 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
 
     /*
      * Check is payment is completed or status del payments in paypal
-     * @param data 
-     * @param actions 
+     * @param {Object} data 
+     * @param {Object} actions 
      */
     const onApprove = async(data: OnApproveData, actions: OnApproveActions): Promise<void> => {
         console.log("🚀 ~ onApprove ~ onApprove:")
@@ -76,10 +75,6 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
     }
 
     return (
-        <PayPalButtons
-            onApprove={onApprove}
-            createOrder={createOrder}
-        >
-        </PayPalButtons>
+        <PayPalButtons onApprove={onApprove} createOrder={createOrder}></PayPalButtons>
     )
 }
