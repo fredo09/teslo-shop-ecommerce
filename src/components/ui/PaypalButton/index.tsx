@@ -51,7 +51,6 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
 
         //TODO: GUARDAR EL ID DE PAYPAL EN LA BASDE DE DATOS "SETTRANSACTIONPAYPALID"
         const { ok, order } = await setTransactionPaypalIdAction(orderId, transactionsPaypalId);
-        console.log("🚀 ~ createOrder ~ order:", order);
 
         if (!ok) {
             throw new Error('no se pudo hacer la transaccion');
@@ -66,14 +65,15 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
      * @param {Object} actions 
      */
     const onApprove = async(data: OnApproveData, actions: OnApproveActions): Promise<void> => {
-        console.log("🚀 ~ onApprove ~ onApprove:")
         const details = await actions.order?.capture();
 
         if (!details) return;
+
+        const orderId = details.id ?? '';
         
         //! Server actions
-        await paypalCheckPaymentAction( details.id ) ;
-    }
+        await paypalCheckPaymentAction(orderId) ;
+    };
 
     return (
         <PayPalButtons onApprove={onApprove} createOrder={createOrder}></PayPalButtons>
