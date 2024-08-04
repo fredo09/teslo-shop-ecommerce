@@ -3,13 +3,17 @@
  */
 'use server';
 
+import type { PaypalOrderStatusResponse } from "@/interfaces";
+
 /**
- * CHeck status payment in paypal with transaccionPaypalId
+ * Check status payment in paypal with transaccionPaypalId
  * @param transaccionPaypalId {string}
  */
-export const paypalCheckPaymentAction = async( transaccionPaypalId: string | undefined ) => {
-    console.log("🚀 ~ paypalCheckPaymentAction ~ transaccionPaypalId:", transaccionPaypalId);
+export const paypalCheckPaymentAction = async( transaccionPaypalId: string ) => {
+    console.log("🚀 ~ paypalCheckPaymentAction ~ transaccionPaypalId:", transaccionPaypalId)
+    console.log("🚀 ~ paypalCheckPaymentAction ~ transaccionPaypalId:", typeof(transaccionPaypalId));
 
+    // Recuperamos el token para verificar pago en paypal
     const tokenPaypal = await getPaypalBearToken();
     console.log("🚀 ~ paypalCheckPaymentAction ~ tokenPaypal:", tokenPaypal)
 
@@ -20,6 +24,29 @@ export const paypalCheckPaymentAction = async( transaccionPaypalId: string | und
         }
     }
 
+    //Recupaeramos el estatus del pago 
+    const responsePayment = await verifyOrderPaypalPayment(transaccionPaypalId, tokenPaypal);
+
+    if (!responsePayment) {
+        return {
+            ok: false,
+            message: 'No se puede verificar el pago paypal 🤡'
+        }
+    }
+
+    const { status, purchase_units } = responsePayment;
+    // const {  } = purchase_units[0];
+
+    if ( status !== 'COMPLETED' ) {
+        return {
+            ok: false,
+            message: 'El pago no se ha completado 🤡'
+        }
+    }
+
+    //TODO: ACTUALIZAR EL PAGO EN LA BASE DE DATOS 
+    
+    console.log("🚀 ~ paypalCheckPaymentAction ~ status, purchase_units:", { status, purchase_units })
 };
 
 
@@ -60,5 +87,38 @@ const getPaypalBearToken = async (): Promise<string | null> => {
     } catch (error) {
         console.log("🚀 ~ getPaypalBearToken ~ error:", error)
         return null;
+    }
+}
+
+/**
+ * @description verify order paypal token
+ * @param {string} paypalTransaccionId 
+ * @param {string} bearerTokenPaypal 
+ * @returns {Promise<PaypalOrderStatusResponse | null>}response
+ */
+const verifyOrderPaypalPayment= async (
+    paypalTransaccionId: string, bearerTokenPaypal: string 
+):Promise<PaypalOrderStatusResponse | null> => {
+    const PAYPAL_URL = `${process.env.PAYPAL_ORDERS_URL}/${paypalTransaccionId}`;
+
+    const myHeaders = new Headers();
+    myHeaders.append(
+        "Authorization",
+        `Bearer ${bearerTokenPaypal}`
+    );
+
+    const requestOptions = {
+        method: "GET",
+        headers: myHeaders
+    };
+
+    try {
+        const response  = await fetch( PAYPAL_URL, requestOptions ).then((response) => { return response.json()})
+        console.log("🚀 ~ verifyOrderPaypalPayment ~ response:", response)
+        return response;
+
+    } catch (error) {
+        console.log("🚀 ~ verifyOrderPaypalPayment ~ error:", error)
+        return null
     }
 }
