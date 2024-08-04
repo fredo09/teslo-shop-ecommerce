@@ -51,7 +51,9 @@ export default async function OrderById({ params }: Props) {
                         }>
                             <IoCardOutline size={30} />
                             {/* <span className="mx-2">Pendiente de pago</span> */}
-                            <span className="mx-2">Pagada</span>
+                            <span className="mx-2 font-bold">
+                                { !orden!.isPaid ? 'No pagado' : 'Pagado' }
+                            </span>
                         </div>
 
                         {/* Items */}
