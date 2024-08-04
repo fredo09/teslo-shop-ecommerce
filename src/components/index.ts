@@ -9,8 +9,11 @@ export * from './ui';
 // * Components Products
 export * from './products';
 
+//* Components Order
+export * from './orders';
+
 // * Components Prodcut
 export * from './product';
 
 // * Providers
-export * from './provider';
+export * from './providers';
