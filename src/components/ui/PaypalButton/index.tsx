@@ -39,6 +39,7 @@ export const PaypalButton = ( { orderId, amount }: Props ) => {
             purchase_units: [
                 {
                     //invoice_id: 'order_id' -> nueva version 'reference_id'
+                    reference_id: orderId,
                     amount: {
                         value: `${transformAmount}`,
                         currency_code: 'USD'
