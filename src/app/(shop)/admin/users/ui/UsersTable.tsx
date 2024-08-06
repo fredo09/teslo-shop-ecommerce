@@ -4,8 +4,8 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import type { User } from '@/interfaces';
+import { changeUserRoleAction } from '@/actions';
 
 interface Props {
     users: User[];
@@ -50,7 +50,7 @@ export const UsersTable = ({ users }: Props) => {
                                 <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                     <select
                                         value={user.role}
-                                        onChange={e => console.log("🚀 ~ content_log:, e.target.value")}
+                                        onChange={e => changeUserRoleAction(user.id, e.target.value)}
                                         className='text-sm w-full p-2 text-gray-900'>
                                             <option value="admin">Admin</option>
                                             <option value="user">User</option>
