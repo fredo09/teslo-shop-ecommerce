@@ -8,3 +8,4 @@ export * from './Countries';
 export * from './Order';
 export * from './Payments';
 export * from './Product';
+export * from './User';
