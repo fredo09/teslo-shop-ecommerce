@@ -5,7 +5,19 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config"
 
-export const getUserPginationActions = async () => {
+interface PaginationOption {
+    page?: number,
+    take?: number, //* -> usuarios a mostrar por pagina
+}
+
+export const getUserPginationActions = async ({ page = 1, take = 10 }: PaginationOption) => {
+    //*validacion si el page no es un numero y no debe de hacer paginas 0
+    if (isNaN(Number(page))) page = 1;
+    if (page < 1) page = 1;
+
+    if (isNaN(Number(page))) page = 1;
+    if (page < 1) page = 1;
+
     try {
         const sessionUser = await auth();
 
@@ -17,10 +29,18 @@ export const getUserPginationActions = async () => {
         }
 
         const usersDB = await prisma.user.findMany({
+            take: take,
+            skip: (page - 1) * take,
             orderBy: {
                 name: 'desc'
             }
         });
+
+        const constUsers = await prisma.user.count();
+        console.log("🚀 ~ getUserPginationActions ~ constUsers:", constUsers)
+
+        
+        const totalPages = Math.ceil( constUsers / take );
 
         if (!usersDB) {
             return {
@@ -32,7 +52,11 @@ export const getUserPginationActions = async () => {
         return {
             ok: true,
             message: 'Se han encontrado usuarios',
-            users: usersDB
+            pagination: {
+                currenPage: page,
+                totalPages: totalPages,
+                users: usersDB
+            } 
         }
 
     } catch (error) {
