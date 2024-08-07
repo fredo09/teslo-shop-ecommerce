@@ -3,9 +3,9 @@
  */
 
 import { Title } from "@/components";
-import { getProductBySlugAction } from "@/actions";
 import { redirect } from "next/navigation";
 import { ProductForm } from "./ui/ProductForm";
+import { getCategoriesAction, getProductBySlugAction } from "@/actions";
 
 interface Props {
     params: {
@@ -17,20 +17,20 @@ export default async function ProductAdminPage({ params }: Props ) {
     const { slug } = params;
 
     const productAction = await getProductBySlugAction(slug);
-    console.log("🚀 ~ ProductAdminPage ~ productAction:", productAction)
+    const { categories = [] } = await getCategoriesAction();
 
     if (!productAction) {
         redirect('/admin/products');
     }
 
-    const titleProduct = ( slug === 'new' ) ? 'Nuevo' : 'Editar'
+    const titleProduct = ( slug === 'new' ) ? 'Nuevo' : 'Editar';
 
     return (
         <>
             <Title title={`${titleProduct} Producto`}/>
 
             {/* Form product */}
-            <ProductForm product={productAction} />
+            <ProductForm product={productAction} categoires={categories} />
         </>
     )
 }

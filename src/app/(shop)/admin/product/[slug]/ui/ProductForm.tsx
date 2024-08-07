@@ -3,15 +3,16 @@
  */
 "use client";
 
-import { Product } from "@/interfaces";
+import { Product, Categories } from "@/interfaces";
 
 interface Props {
     product: Product;
+    categoires: Categories[]
 }
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
-export const ProductForm = ({ product }: Props) => {
+export const ProductForm = ({ product, categoires }: Props) => {
     return (
         <form className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
             {/* Textos */}
@@ -59,6 +60,13 @@ export const ProductForm = ({ product }: Props) => {
                     <span>Categoria</span>
                     <select className="p-2 border rounded-md bg-gray-200">
                         <option value="">[Seleccione]</option>
+                        {
+                            categoires.map((category) => (
+                                <option  key={category.id} value={`${category.id}`}>
+                                    {category.name}
+                                </option>
+                            ))
+                        }
                     </select>
                 </div>
 
