@@ -16,8 +16,10 @@ interface Props {
 export default async function ProductAdminPage({ params }: Props ) {
     const { slug } = params;
 
-    const productAction = await getProductBySlugAction(slug);
-    const { categories = [] } = await getCategoriesAction();
+    const [productAction, { categories = [] }] = await Promise.all([
+        getProductBySlugAction(slug),
+        getCategoriesAction()
+    ]);
 
     if (!productAction) {
         redirect('/admin/products');
