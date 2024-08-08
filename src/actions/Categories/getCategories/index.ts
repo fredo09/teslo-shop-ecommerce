@@ -17,7 +17,11 @@ export const getCategoriesAction = async () => {
             }
         }
 
-        const categoriesDB = await prisma.category.findMany({});
+        const categoriesDB = await prisma.category.findMany({
+            orderBy: {
+                name: "asc"
+            }
+        });
         console.log("🚀 ~ getCategoriesAction ~ categoriesDB:", categoriesDB)
 
         if (!categoriesDB) {
