@@ -3,16 +3,16 @@
  */
 "use client";
 
+import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { Product, Categories } from "@/interfaces";
+import { Product, Categories, ImageProduct } from "@/interfaces";
 
 interface Props {
-    product: Product;
+    product: Product & { imageProduct?: ImageProduct[] };
     categoires: Categories[]
 }
 
 type FormInputs = {
-    //TODO: SET FORM INPUT 
     title: string;
     slug: string;
     description: string;
@@ -22,11 +22,14 @@ type FormInputs = {
     tags: string;
     gender: 'Men' | 'Kid' | 'Women' | 'Unisex';
     categoryId: string;
+
+    //TODO: Images
 }
 
-const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export const ProductForm = ({ product, categoires }: Props) => {
+console.log("🚀 ~ ProductForm ~ product:", product)
 
     const { handleSubmit, register, formState:{ isValid } } = useForm<FormInputs>({
         defaultValues: {
@@ -110,7 +113,7 @@ export const ProductForm = ({ product, categoires }: Props) => {
                     <span>Tallas</span>
                     <div className="flex flex-wrap">
                         {
-                            sizes.map(size => (
+                            SIZES.map(size => (
                                 // bg-blue-500 text-white <--- si está seleccionado
                                 <div key={size} className="flex  items-center justify-center w-10 h-10 mr-2 border rounded-md">
                                     <span>{size}</span>
@@ -127,6 +130,29 @@ export const ProductForm = ({ product, categoires }: Props) => {
                             className="p-2 border rounded-md bg-gray-200"
                             accept="image/png, image/jpeg"
                         />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {
+                            product.imageProduct?.map((image) => (
+                                <div key={image.id}>
+                                    <Image
+                                        src={`/products/${image.urlImage}`}
+                                        className="rounded-t shadow-sd"
+                                        alt={ product.title ?? '' }
+                                        width={300}
+                                        height={300}
+                                    />
+
+                                    <button 
+                                        type='button' 
+                                        onClick={() => console.log("🚀 ~ image id:", image.id )}
+                                        className="btn-danger w-full rounded-b-xl">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
