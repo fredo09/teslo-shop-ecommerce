@@ -19,8 +19,8 @@ export default async function AdminUserPage({ searchParams }: Props) {
     const responseUsers = await getUserPginationActions({page});
     const { ok, pagination } = responseUsers;
 
-    const totalPages = pagination!.totalPages;
-    const users = pagination!.users;
+    let users = pagination?.users ?? [];
+    const totalPages = pagination?.totalPages ?? 1;
 
     if (!ok) {
         redirect('/auth/login');
