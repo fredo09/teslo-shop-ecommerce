@@ -8,7 +8,8 @@ export const getProductBySlugAction = async( slug: string ) => {
             include: {
                 imageProduct: {
                     select:{
-                        urlImage: true
+                        urlImage: true,
+                        id: true
                     }
                 }
             },
