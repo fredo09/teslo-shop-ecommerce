@@ -6,6 +6,7 @@
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Product, Categories, ImageProduct } from "@/interfaces";
+import clsx from "clsx";
 
 interface Props {
     product: Product & { imageProduct?: ImageProduct[] };
@@ -29,15 +30,25 @@ type FormInputs = {
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export const ProductForm = ({ product, categoires }: Props) => {
-console.log("🚀 ~ ProductForm ~ product:", product)
-
-    const { handleSubmit, register, formState:{ isValid } } = useForm<FormInputs>({
+    console.log("🚀 ~ ProductForm ~ product:", product)
+    const { handleSubmit, register, formState:{ isValid }, getValues, setValue, watch } = useForm<FormInputs>({
         defaultValues: {
             ...product,
             tags: product.tags.join(', '),
             sizes: product.sizes ?? []
         }
     });
+
+    //!! SE USA PARA VER QUE EL CAMBIO EN UN FORMULARIO Y HACER LA RECARGA DEL FORMULARIO "USEFORM HOOK"
+    watch('sizes');
+
+    const onChangeSize = (sizeValue: string) => {
+        //! -> Set es lo mismo que los arreglos de tipo Set pero evita duplicados
+        const sizeNewSet = new Set(getValues('sizes'));
+        sizeNewSet.has(sizeValue) ? sizeNewSet.delete(sizeValue) : sizeNewSet.add(sizeValue);
+
+        setValue('sizes', Array.from(sizeNewSet))
+    }
 
     const onSubmit = async ( dataForm: FormInputs) => {
         console.log("🚀 ~ onSubmit ~ dataForm:", dataForm)
@@ -115,7 +126,19 @@ console.log("🚀 ~ ProductForm ~ product:", product)
                         {
                             SIZES.map(size => (
                                 // bg-blue-500 text-white <--- si está seleccionado
-                                <div key={size} className="flex  items-center justify-center w-10 h-10 mr-2 border rounded-md">
+                                <div 
+                                    key={size}
+                                    onClick={() => onChangeSize(size)}
+                                    // className="flex bg-blue-500 text-white items-center justify-center w-10 h-10 mr-2 border rounded-md"
+                                    className={
+                                        clsx(
+                                            "p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center",
+                                            {
+                                                'text-white bg-blue-500': getValues('sizes').includes(size)
+                                            }
+                                        )
+                                    }
+                                    >
                                     <span>{size}</span>
                                 </div>
                             ))
