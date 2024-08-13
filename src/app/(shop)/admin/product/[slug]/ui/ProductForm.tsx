@@ -6,11 +6,11 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { Product, Categories, ImageProduct } from "@/interfaces";
 import { createUpdateProductAction } from "@/actions";
+import { Product, Categories, ImageProduct } from "@/interfaces";
 
 interface Props {
-    product: Product & { imageProduct?: ImageProduct[] };
+    product: Partial<Product> & { imageProduct?: ImageProduct[] };
     categoires: Categories[]
 }
 
@@ -35,7 +35,7 @@ export const ProductForm = ({ product, categoires }: Props) => {
     const { handleSubmit, register, formState:{ isValid }, getValues, setValue, watch } = useForm<FormInputs>({
         defaultValues: {
             ...product,
-            tags: product.tags.join(', '),
+            tags: product.tags?.join(', '),
             sizes: product.sizes ?? []
         }
     });
@@ -59,7 +59,10 @@ export const ProductForm = ({ product, categoires }: Props) => {
 
         const { ...productToSave } = dataForm;
 
-        formDataSave.append('id', product.id ?? '');
+        if ( product.id ) {
+            formDataSave.append('id', product.id ?? '');
+        }
+
         formDataSave.append('title', productToSave.title);
         formDataSave.append('description', productToSave.description);
         formDataSave.append('slug', productToSave.slug);
@@ -71,7 +74,6 @@ export const ProductForm = ({ product, categoires }: Props) => {
         formDataSave.append('sizes', productToSave.sizes.toString());
 
         await createUpdateProductAction(formDataSave);
-
     };
 
     return (
@@ -139,6 +141,13 @@ export const ProductForm = ({ product, categoires }: Props) => {
 
             {/* Selector de tallas y fotos */}
             <div className="w-full">
+                <div className="flex flex-col mb-2">
+                    <span>Inventario</span>
+                    <input type="number" 
+                    className="p-2 border rounded-md bg-gray-200" 
+                    {...register('inStock', { required: true, min: 0 })} />
+                </div>
+
                 {/* As checkboxes */}
                 <div className="flex flex-col">
                     <span>Tallas</span>

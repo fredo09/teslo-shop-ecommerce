@@ -21,7 +21,7 @@ export default async function ProductAdminPage({ params }: Props ) {
         getCategoriesAction()
     ]);
 
-    if (!productAction) {
+    if ( !productAction && slug !== 'new') {
         redirect('/admin/products');
     }
 
@@ -32,7 +32,7 @@ export default async function ProductAdminPage({ params }: Props ) {
             <Title title={`${titleProduct} Producto`}/>
 
             {/* Form product */}
-            <ProductForm product={productAction} categoires={categories} />
+            <ProductForm product={ productAction ?? {} } categoires={ categories } />
         </>
     )
 }
