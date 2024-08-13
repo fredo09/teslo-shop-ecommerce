@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { ProductImage } from '../ProductImage';
 import { Swiper as SwiperObject } from 'swiper'; //  *-> typing TypeScript
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
@@ -46,13 +47,12 @@ export const SlideShowProduct = ({ images, title, className }: Props) => {
                     {
                         images.map(image => (
                             <SwiperSlide key={image}>
-                                <Image 
+                                <ProductImage 
                                     width={1024}
-                                    height={700}
-                                    src={`/products/${image}`}
-                                    className='rounded-lg object-fill'
+                                    height={800}
+                                    src={image}
                                     alt={title}
-                                    priority={true}
+                                    className='rounded-lg object-fill'
                                 />
                             </SwiperSlide>
                         ))
@@ -72,12 +72,12 @@ export const SlideShowProduct = ({ images, title, className }: Props) => {
                 {
                     images.map(image => (
                         <SwiperSlide key={image}>
-                            <Image
+                            <ProductImage
                                 width={300}
                                 height={300}
-                                src={`/products/${image}`}
-                                className='rounded-lg object-fill'
+                                src={image}
                                 alt={title}
+                                className='rounded-lg object-fill'
                             />
                         </SwiperSlide>
                     ))

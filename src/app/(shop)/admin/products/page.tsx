@@ -3,10 +3,9 @@
  */
 
 import Link from "next/link";
-import { Pagination, Title } from "@/components";
-import { getproductPaginationActions } from "@/actions";
-import Image from "next/image";
 import { currencyFormat } from "@/utils";
+import { getproductPaginationActions } from "@/actions";
+import { Pagination, ProductImage, Title } from "@/components";
 
 interface Props {
     searchParams: {
@@ -63,8 +62,8 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                                     className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <Link href={`/product/${product.slug}`}>
-                                            <Image
-                                                src={`/products/${product.imageProduct[0].urlImage}` }
+                                            <ProductImage
+                                                src={product.imageProduct[0]?.urlImage}
                                                 alt={product.slug}
                                                 width={80}
                                                 height={80}
