@@ -2,6 +2,7 @@
  * export component Product
  */
 
+export * from './ProductImage';
 export * from './SizeSelector';
 export * from './QuantitySelector';
 export * from './SlideShowMobileProduct';
