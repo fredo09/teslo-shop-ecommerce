@@ -3,8 +3,9 @@
  */
 'use server';
 
+import prisma from '@/lib/prisma';
 import { z } from 'zod';
-import { Gender } from '@prisma/client';
+import { Gender, Product, Size } from '@prisma/client';
 
 //* -> nueva validacion para esquema del producto
 const productSchemaValidation = z.object({
@@ -21,10 +22,7 @@ const productSchemaValidation = z.object({
 
 });
 
-export const createUpdateProductAction = async(formDataProduct: FormData) => {
-    console.log("🚀 ~ createUpdateProductAction ~ formDataProduct:", formDataProduct);
-
-
+export const createUpdateProductAction = async( formDataProduct: FormData ) => {
     const data = Object.fromEntries(formDataProduct);
     console.log("🚀 ~ createUpdateProductAction ~ data:", data)
     const parsedData = productSchemaValidation.safeParse(data);
@@ -39,6 +37,54 @@ export const createUpdateProductAction = async(formDataProduct: FormData) => {
 
     console.log("🚀 ~ paser data:", parsedData.data);
 
+    //! SE HACE UNA TRANSACCION PARA SUBIR FOTOS Y DATA DEL PRODUCTO
+    const productData = parsedData.data;
+    productData.slug = productData.slug.toLowerCase().replace(/ /g, '-').trim();
+
+    const { id, ...restProduct } = productData;
+
+    const prismaTx = await prisma.$transaction( async (tx) => {
+        let productTransaction: Product;
+
+        const tagsArray = restProduct.tags.split(',').map( tag => tag.trim().toLowerCase() );
+
+        if (id) {
+            //* Actualizar
+            productTransaction =  await prisma.product.update({
+                where: { id },
+                data: {
+                    ...restProduct,
+                    sizes: {
+                        set : restProduct.sizes as Size[] //! -> "Set" se usa para enumenraciones  
+                    },
+                    tags: {
+                        set: tagsArray
+                    }
+                }
+            });
+
+        } else {
+            //* Crear nuevo producto
+            productTransaction = await prisma.product.create({
+                data: {
+                    ...restProduct,
+                    sizes: {
+                        set: restProduct.sizes as Size[]
+                    },
+                    tags: {
+                        set: tagsArray
+                    }
+                }
+            });
+
+            console.log("🚀 ~ prismaTx ~ productTransaction:", productTransaction)
+        }
+
+        return {
+            ok: true,
+            productTransaction
+        }
+    });
 
     return {
         ok: true,
