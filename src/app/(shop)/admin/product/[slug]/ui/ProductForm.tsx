@@ -3,10 +3,11 @@
  */
 "use client";
 
+import clsx from "clsx";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Product, Categories, ImageProduct } from "@/interfaces";
-import clsx from "clsx";
+import { createUpdateProductAction } from "@/actions";
 
 interface Props {
     product: Product & { imageProduct?: ImageProduct[] };
@@ -51,7 +52,26 @@ export const ProductForm = ({ product, categoires }: Props) => {
     }
 
     const onSubmit = async ( dataForm: FormInputs) => {
-        console.log("🚀 ~ onSubmit ~ dataForm:", dataForm)
+        console.log("🚀 ~ onSubmit ~ dataForm:", dataForm);
+
+        //! formData es propia de javascript para enviar informacion de un formulario
+        const formDataSave = new FormData();
+
+        const { ...productToSave } = dataForm;
+
+        formDataSave.append('id', product.id ?? '');
+        formDataSave.append('title', productToSave.title);
+        formDataSave.append('description', productToSave.description);
+        formDataSave.append('slug', productToSave.slug);
+        formDataSave.append('price', productToSave.price.toString());
+        formDataSave.append('inStock', productToSave.inStock.toString());
+        formDataSave.append('tags', productToSave.tags);
+        formDataSave.append('gender', productToSave.gender);
+        formDataSave.append('categoryId', productToSave.categoryId);
+        formDataSave.append('sizes', productToSave.sizes.toString());
+
+        await createUpdateProductAction(formDataSave);
+
     };
 
     return (
@@ -91,10 +111,10 @@ export const ProductForm = ({ product, categoires }: Props) => {
                     <span>Gender</span>
                     <select className="p-2 border rounded-md bg-gray-200" {...register('gender', { required: true })}>
                         <option value="">[Seleccione]</option>
-                        <option value="men">Men</option>
-                        <option value="women">Women</option>
-                        <option value="kid">Kid</option>
-                        <option value="unisex">Unisex</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Kid">Kid</option>
+                        <option value="Unisex">Unisex</option>
                     </select>
                 </div>
 
