@@ -28,6 +28,7 @@ type FormInputs = {
     categoryId: string;
 
     //TODO: Images
+    images? : FileList;
 }
 
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
@@ -40,7 +41,10 @@ export const ProductForm = ({ product, categoires }: Props) => {
         defaultValues: {
             ...product,
             tags: product.tags?.join(', '),
-            sizes: product.sizes ?? []
+            sizes: product.sizes ?? [],
+
+            //Images
+            images: undefined
         }
     });
 
@@ -61,7 +65,8 @@ export const ProductForm = ({ product, categoires }: Props) => {
         //! formData es propia de javascript para enviar informacion de un formulario
         const formDataSave = new FormData();
 
-        const { ...productToSave } = dataForm;
+        const { images, ...productToSave } = dataForm;
+        console.log("🚀 ~ onSubmit ~ images:", images)
 
         if ( product.id ) {
             formDataSave.append('id', product.id ?? '');
@@ -76,6 +81,12 @@ export const ProductForm = ({ product, categoires }: Props) => {
         formDataSave.append('gender', productToSave.gender);
         formDataSave.append('categoryId', productToSave.categoryId);
         formDataSave.append('sizes', productToSave.sizes.toString());
+
+        if ( images ) {
+            for (let index = 0; index < images.length; index++) {
+                formDataSave.append('images', images[index]);
+            }
+        }
 
         const { ok, producto: newProduct } = await createUpdateProductAction(formDataSave);
 
@@ -190,8 +201,9 @@ export const ProductForm = ({ product, categoires }: Props) => {
                         <input
                             type="file"
                             multiple
+                            { ...register('images') }
                             className="p-2 border rounded-md bg-gray-200"
-                            accept="image/png, image/jpeg"
+                            accept="image/png, image/jpeg, image/avif"
                         />
                     </div>
 
