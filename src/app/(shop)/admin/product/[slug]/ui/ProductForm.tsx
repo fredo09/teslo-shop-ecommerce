@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from 'react-hot-toast';
-import { createUpdateProductAction } from "@/actions";
+import { createUpdateProductAction, deleteProductImageAction } from "@/actions";
 import { Product, Categories, ImageProduct } from "@/interfaces";
 import { ProductImage } from "@/components";
 
@@ -98,6 +98,14 @@ export const ProductForm = ({ product, categoires }: Props) => {
 
         route.replace(`/admin/product/${newProduct?.slug}`);
     };
+
+    const onDeleteImage = async (imageId: number, imageUrl: string) => {
+        const { ok, message } = await deleteProductImageAction(imageId, imageUrl); 
+
+        if (ok) {
+            toast.success(message);
+        }
+    }
 
     return (
         <form onSubmit={ handleSubmit(onSubmit) } className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
@@ -222,7 +230,7 @@ export const ProductForm = ({ product, categoires }: Props) => {
 
                                     <button 
                                         type='button' 
-                                        onClick={() => console.log("🚀 ~ image id:", image.id )}
+                                        onClick={() => onDeleteImage(image.id, image.urlImage)}
                                         className="btn-danger w-full rounded-b-xl">
                                         Eliminar
                                     </button>
