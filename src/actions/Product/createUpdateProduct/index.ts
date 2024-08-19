@@ -87,6 +87,17 @@ export const createUpdateProductAction = async( formDataProduct: FormData ) => {
             if (formDataProduct.getAll('images')) {
                 const imagesUploaded = await uploadImagesProducts(formDataProduct.getAll('images') as File[]);
                 console.log("🚀 ~ prismaTx ~ imagesUploaded:", imagesUploaded);
+                if (!imagesUploaded) {
+                    throw new Error('No se pudo subir las images');
+                }
+
+                //* Insertamos las imagenes a la DB
+                await prisma.imageProduct.createMany({
+                    data: imagesUploaded.map(image => ({
+                        urlImage: image!,
+                        productId: productTransaction.id
+                    }))
+                });
             }
 
             return {
