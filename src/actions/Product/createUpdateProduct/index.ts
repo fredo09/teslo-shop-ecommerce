@@ -6,6 +6,7 @@
 import prisma from '@/lib/prisma';
 import { z } from 'zod';
 import { Gender, Product, Size } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 //* -> nueva validacion para esquema del producto
 const productSchemaValidation = z.object({
@@ -43,52 +44,65 @@ export const createUpdateProductAction = async( formDataProduct: FormData ) => {
 
     const { id, ...restProduct } = productData;
 
-    const prismaTx = await prisma.$transaction( async (tx) => {
-        let productTransaction: Product;
+    try {
+        const prismaTx = await prisma.$transaction(async (tx) => {
+            let productTransaction: Product;
 
-        const tagsArray = restProduct.tags.split(',').map( tag => tag.trim().toLowerCase() );
+            const tagsArray = restProduct.tags.split(',').map(tag => tag.trim().toLowerCase());
 
-        if (id) {
-            //* Actualizar
-            productTransaction =  await prisma.product.update({
-                where: { id },
-                data: {
-                    ...restProduct,
-                    sizes: {
-                        set : restProduct.sizes as Size[] //! -> "Set" se usa para enumenraciones  
-                    },
-                    tags: {
-                        set: tagsArray
+            if (id) {
+                //* Actualizar
+                productTransaction = await prisma.product.update({
+                    where: { id },
+                    data: {
+                        ...restProduct,
+                        sizes: {
+                            set: restProduct.sizes as Size[] //! -> "Set" se usa para enumenraciones  
+                        },
+                        tags: {
+                            set: tagsArray
+                        }
                     }
-                }
-            });
+                });
 
-        } else {
-            //* Crear nuevo producto
-            productTransaction = await prisma.product.create({
-                data: {
-                    ...restProduct,
-                    sizes: {
-                        set: restProduct.sizes as Size[]
-                    },
-                    tags: {
-                        set: tagsArray
+            } else {
+                //* Crear nuevo producto
+                productTransaction = await prisma.product.create({
+                    data: {
+                        ...restProduct,
+                        sizes: {
+                            set: restProduct.sizes as Size[]
+                        },
+                        tags: {
+                            set: tagsArray
+                        }
                     }
-                }
-            });
+                });
 
-            console.log("🚀 ~ prismaTx ~ productTransaction:", productTransaction)
-        }
+                console.log("🚀 ~ prismaTx ~ productTransaction:", productTransaction)
+            }
+
+            return {
+                ok: true,
+                productTransaction
+            }
+        });
+
+        revalidatePath('/admin/products');
+        revalidatePath(`/admin/products/${prismaTx.productTransaction.slug}`);
+        revalidatePath(`/products/${prismaTx.productTransaction.slug}`);
 
         return {
             ok: true,
-            productTransaction
+            message: 'Se ha creado el producto',
+            producto: prismaTx.productTransaction
         }
-    });
-
-    return {
-        ok: true,
-        message: ''
+    } catch (error) {
+        console.log("🚀 ~ createUpdateProductAction ~ error:", error)
+        return {
+            ok: true,
+            error: error,
+            message: 'Ocurrio un error ',
+        }
     }
-
 };

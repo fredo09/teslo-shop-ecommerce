@@ -6,6 +6,8 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from 'react-hot-toast';
 import { createUpdateProductAction } from "@/actions";
 import { Product, Categories, ImageProduct } from "@/interfaces";
 
@@ -31,6 +33,8 @@ type FormInputs = {
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export const ProductForm = ({ product, categoires }: Props) => {
+    const route = useRouter();
+
     console.log("🚀 ~ ProductForm ~ product:", product)
     const { handleSubmit, register, formState:{ isValid }, getValues, setValue, watch } = useForm<FormInputs>({
         defaultValues: {
@@ -73,7 +77,14 @@ export const ProductForm = ({ product, categoires }: Props) => {
         formDataSave.append('categoryId', productToSave.categoryId);
         formDataSave.append('sizes', productToSave.sizes.toString());
 
-        await createUpdateProductAction(formDataSave);
+        const { ok, producto: newProduct } = await createUpdateProductAction(formDataSave);
+
+        if (!ok) {
+            toast.error('ocurrio un error al ingresar el producto 🤡');
+            return;
+        }
+
+        route.replace(`/admin/product/${newProduct?.slug}`);
     };
 
     return (
