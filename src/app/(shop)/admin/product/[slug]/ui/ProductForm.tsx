@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { toast } from 'react-hot-toast';
 import { createUpdateProductAction } from "@/actions";
 import { Product, Categories, ImageProduct } from "@/interfaces";
+import { ProductImage } from "@/components";
 
 interface Props {
     product: Partial<Product> & { imageProduct?: ImageProduct[] };
@@ -211,8 +212,8 @@ export const ProductForm = ({ product, categoires }: Props) => {
                         {
                             product.imageProduct?.map((image) => (
                                 <div key={image.id}>
-                                    <Image
-                                        src={`/products/${image.urlImage}`}
+                                    <ProductImage
+                                        src={image.urlImage}
                                         className="rounded-t shadow-sd"
                                         alt={ product.title ?? '' }
                                         width={300}
