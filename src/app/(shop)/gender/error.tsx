@@ -1,0 +1,13 @@
+/*
+ *  Error Gender
+ */
+'use client';
+
+import { NotFound } from "@/components";
+
+
+export default function NotFoundPage() {
+    return (
+        <NotFound />
+    );
+} 
