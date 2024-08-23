@@ -8,6 +8,9 @@ import { redirect } from "next/navigation";
 import { getPaginateOrderActions } from "@/actions";
 import { IoCardOutline } from "react-icons/io5";
 
+//* error build headers
+export const dynamic = "force-dynamic";
+
 export default async function AdminOrdenPage() {
     const { ok, orders } = await getPaginateOrderActions();
 
